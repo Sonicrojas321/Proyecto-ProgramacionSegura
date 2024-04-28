@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Registro de Prueba{% endblock %}
+
+{% block encabezado %}Registro de Prueba{% endblock %}
+
+{% block contenido %}
+  <form method="post" action="{% url 'pruebaFormulario' %}">
+    {% csrf_token %}
+    <div>
+      <label for="id_nombre">Nombre:</label>
+      <input type="text" name="nombre" id="id_nombre" required>
+    </div>
+    <div>
+      <label for="id_apellido">Apellido:</label>
+      <input type="text" name="apellido" id="id_apellido" required>
+    </div>
+    <button type="submit" id="botonPrueba">Registrar</button>
+  </form>
+{% endblock %}
+
