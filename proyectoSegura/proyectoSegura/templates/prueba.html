@@ -5,7 +5,7 @@
 {% block encabezado %}Registro de Prueba{% endblock %}
 
 {% block contenido %}
-  <form method="post" action="{% url 'pruebaFormulario' %}">
+  <form method="post">
     {% csrf_token %}
     <div>
       <label for="id_nombre">Nombre:</label>
