@@ -21,5 +21,7 @@ from proyectoSegura import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.hello),
-    path('lista/', views.lista_ejercicios)
+    path('registro/', views.registrarAlumno),
+    path('lista/', views.lista_ejercicios),
+    #path('login/', views.login),
 ]

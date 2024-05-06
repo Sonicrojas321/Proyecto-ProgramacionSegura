@@ -7,7 +7,10 @@ from db import models
 
 
 def hello(request):
-    return render(request, "prueba.html")
+    return render(request, "login.html")
+
+def registrarAlumno(request):
+    return render(request, "registro.html")
 
 def lista_ejercicios(request) -> HttpResponse:
     """Función que regresa la página donde se mostrarán el listado de ejercicios
@@ -19,3 +22,6 @@ def lista_ejercicios(request) -> HttpResponse:
         HttpResponse: _description_
     """
     return render(request, "listaejercicios.html")
+
+#def login(request):
+ #   return render(request, "login.html")
