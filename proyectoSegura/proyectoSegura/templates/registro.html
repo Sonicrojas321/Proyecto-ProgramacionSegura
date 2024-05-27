@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'baseSin.html' %}
 
 {% block titulo %}Registro de alumno{% endblock %}
 
@@ -16,7 +16,12 @@
     {% csrf_token %}
 
     <div class="mb-3">
-      <label for="nombreServidor" class="form-label">Nombre completo:</label>
+      <label for="nombreServidor" class="form-label">Nombre o Nombres:</label>
+      <input type="text" class="form-control" id="nombreAlumno" name="nombreAlumno" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="nombreServidor" class="form-label">Apellidos:</label>
       <input type="text" class="form-control" id="nombreAlumno" name="nombreAlumno" required>
     </div>
 
@@ -30,6 +35,11 @@
       <input type="password" class="form-control" id="contrasenaAlumno" name="contrasenaAlumno" required>
     </div>
 
-    <button type="submit" class="btn btn-primary" id="servidorEnviar">Registrar Alumno</button>
+    <div class="mb-3">
+      <label for="contrasenaBot" class="form-label">Confirmar contraseña:</label>
+      <input type="password" class="form-control" id="contrasenaAlumno" name="contrasenaAlumno" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="alumnoEnviar">Registrar Alumno</button>
   </form>
 {% endblock %}

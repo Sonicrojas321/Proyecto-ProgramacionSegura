@@ -42,5 +42,8 @@ def lista_ejercicios(request) -> HttpResponse:
     """
     return render(request, "listaejercicios.html")
 
+def definir_ejercicio(request) -> HttpResponse:
+    return render (request, "subirEjercicioMaestro.html")
+
 #def login(request):
  #   return render(request, "login.html")
