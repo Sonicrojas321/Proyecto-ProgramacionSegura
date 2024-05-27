@@ -9,10 +9,16 @@ import requests
 from db import models
 from proyectoSegura import settings
 
-def generar_salt():
+def generar_salt() -> str:
+    """Rutina que genera una salt aleatoria para el
+    Password Hashing
+
+    Returns:
+        str: salt que se usará en el Password Hashing
+    """
     p = os.urandom(6)
-    token = base64.b64encode(p).decode('utf-8')
-    return token
+    salt = base64.b64encode(p).decode('utf-8')
+    return salt
 
 def obtener_ip_cliente(request) -> str:
     """Función que regresa la IP del cliente 
@@ -58,7 +64,7 @@ def registrar_cliente(ip: str) -> None:
     nunca se ha visto.
 
     
-    returns: None 
+    returns: No retorna nada, solo hará cambios en la base de datos 
     """
     fecha = datetime.now(timezone.utc)
     registro = models.Intentos(ip=ip, intentos=1,
