@@ -20,7 +20,7 @@ from proyectoSegura import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.hello),
+    path('', views.login),
     path('registro/', views.registrarAlumno),
     path('lista/', views.lista_ejercicios),
     #path('login/', views.login),

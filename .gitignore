@@ -1,4 +1,5 @@
 proyectoSegura/db.sqlite3
+proyectoSegura/db/migrations/*
 proyectoSegura/db/__pycache__/*
 proyectoSegura/db/__pycache__/__init__.cpython-39.pyc
 proyectoSegura/db/__pycache__/models.cpython-39.pyc
