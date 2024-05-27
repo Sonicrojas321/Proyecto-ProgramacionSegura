@@ -4,7 +4,64 @@
 {% block encabezado %}Definir ejercicio{% endblock %}
 {%block contenido %}
 
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="nombreEjercicio" class="form-label">Nombre del ejercicio:</label>
+      <input type="text" class="form-control" id="nombreEjercicio name="nombreEjercicio" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripcion:</label>
+      <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="valorEjercicio" class="form-label">Valor:</label>
+      <input type="text" class="form-control" id="valorEjercicio" name="ValorEjercicio" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="entradaUno" class="form-label">Entrada 1:</label>
+      <input type="text" class="form-control" id="entradaUno" name="entradaUno" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="entradaDos" class="form-label">Entrada 2:</label>
+      <input type="text" class="form-control" id="entradaDos" name="entradaDos" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="entradaTres" class="form-label">Entrada 3:</label>
+        <input type="text" class="form-control" id="entradaTres" name="entradaTres" required>
+      </div>
+
+    <div class="mb-3">
+        <label for="salidaUno" class="form-label">Salida 1:</label>
+        <input type="text" class="form-control" id="salidaUno" name="salidaUno" required>
+      </div>
+    
+    <div class="mb-3">
+        <label for="salidaDos" class="form-label">Salida 2:</label>
+        <input type="text" class="form-control" id="salidaDos" name="salidaDos" required>
+      </div> 
+
+    <div class="mb-3">
+        <label for="salidaTres" class="form-label">Salida 3:</label>
+        <input type="text" class="form-control" id="salidaTres" name="salidaTres" required>
+      </div> 
 
 
+    <button type="submit" class="btn btn-primary" id="definirEjercicio">Definir Ejercicio</button>
+  </form>
+ 
 
 {% endblock %}
