@@ -4,7 +4,39 @@
 {% block encabezado %}Lista de ejercicios{% endblock %}
 {%block contenido %}
 
+<div class="table-responsive">
+    <h5>EJERCICIOS:</h5>
 
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th> <!-- ejercicios -->
+          <th>Descripción</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 
+        falta llenar estos datosconla configuracion de la base de datos -->
+        {% for configuracion in configuraciones_respaldo %}
+          <tr>
+            <td>
+              <input type="radio" name="Seleccionar" value="{{ configuracion.id }}">
+            </td>
+            <td>{{ configuracion.id }}</td>
+            <td>{{ configuracion.ip_origen }}</td>
+            <td>{{ configuracion.directorio_origen }}</td>
+            <td>{{ configuracion.periodicidad }}</td>
+            <td>{{ configuracion.fecha_respaldo }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <button type="submit" class="btn btn-primary">Seleccionar Ejercicio</button>
+</form>
+</div>
 
 
 {% endblock %}
