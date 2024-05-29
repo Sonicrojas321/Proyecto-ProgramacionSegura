@@ -40,7 +40,7 @@ class Ejercicio(models.Model):
     salida3 = models.CharField(max_length=100)
 
 class Respuesta(models.Model):
-    respuesta = models.TextField()
+    respuesta = models.TextField(null=True)
     calificacion = models.DecimalField(decimal_places=1, max_digits=1)
     ejercicio = models.ForeignKey(Ejercicio, on_delete=models.DO_NOTHING)
     alumno = models.ForeignKey(Alumno, on_delete=models.DO_NOTHING)
