@@ -109,4 +109,6 @@ def definir_ejercicio(request) -> HttpResponse:
  #   return render(request, "login.html")
 
 def ver_Ejercicio(request) -> HttpResponse:
-    return render (request, "verEjercicio.html")
+    id_ejercicio = request.POST.get('id_ejercicio')
+    ejercicio_seleccionado = models.Ejercicio.objects.get(id_ejercicio)
+    return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})

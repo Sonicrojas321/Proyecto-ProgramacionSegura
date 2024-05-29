@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+<script src="/static/js/seleccionar_ejercicio.js"></script>
+{% endblock %}
+
 {% block titulo %}Lista de Ejercicios{% endblock %}
 {% block encabezado %}Lista de Ejercicios{% endblock %}
 {% block contenido %}
@@ -28,7 +32,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button type="submit" class="btn btn-primary">Ver Ejercicio</button>
+        <button type="submit" class="btn btn-primary" id="seleccionar_ejercicio">Ver Ejercicio</button>
     </form>
 </div>
 
