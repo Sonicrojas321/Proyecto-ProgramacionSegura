@@ -31,7 +31,7 @@ class Profesor(models.Model):
 class Ejercicio(models.Model):
     nombre_ejercicio = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=500)
-    valor = models.DecimalField(decimal_places=1, max_digits=1)
+    valor = models.IntegerField()
     entrada1 = models.CharField(max_length=100)
     entrada2 = models.CharField(max_length=100)
     entrada3 = models.CharField(max_length=100)
