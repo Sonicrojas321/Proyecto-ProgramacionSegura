@@ -38,3 +38,7 @@ def enviar_mensaje(mensaje: str, token:str, chat_id:str) -> bool:
         return True
     except:
         return False
+
+def asignar_bot() -> object:
+    usuarios = models.Usuario.objects.all()
+    

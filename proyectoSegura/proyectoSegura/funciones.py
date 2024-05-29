@@ -4,10 +4,18 @@ import base64
 from datetime import datetime
 from datetime import timezone
 import os
-
+from django.shortcuts import redirect
 import requests
 from db import models
 from proyectoSegura import settings
+
+def logueado(fun_a_decorar):
+    def interna(request, *args, **kwars):
+        logueado = request.session.get('usuario', False)
+        if not logueado:
+            return redirect('/login')
+        return fun_a_decorar(request, *args, **kwars)
+    return interna
 
 def generar_salt() -> str:
     """Rutina que genera una salt aleatoria para el

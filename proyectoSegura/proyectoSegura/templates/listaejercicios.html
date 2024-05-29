@@ -19,16 +19,14 @@
       <tbody>
         <!-- 
         falta llenar estos datosconla configuracion de la base de datos -->
-        {% for configuracion in configuraciones_respaldo %}
+        {% for ejercicio in ejercicios %}
           <tr>
             <td>
               <input type="radio" name="Seleccionar" value="{{ configuracion.id }}">
             </td>
-            <td>{{ configuracion.id }}</td>
-            <td>{{ configuracion.ip_origen }}</td>
-            <td>{{ configuracion.directorio_origen }}</td>
-            <td>{{ configuracion.periodicidad }}</td>
-            <td>{{ configuracion.fecha_respaldo }}</td>
+            <td>{{ ejercicio.id }}</td>
+            <td>{{ ejercicio.nombre }}</td>
+            <td>{{ ejercicio.descripcion }}</td>
           </tr>
         {% endfor %}
       </tbody>
