@@ -1,40 +1,35 @@
 {% extends "base.html" %}
 
-{% block titulo %}Lista ejercicios{% endblock %}
-{% block encabezado %}Lista de ejercicios{% endblock %}
-{%block contenido %}
+{% block titulo %}Lista de Ejercicios{% endblock %}
+{% block encabezado %}Lista de Ejercicios{% endblock %}
+{% block contenido %}
 
 <div class="table-responsive">
     <h5>EJERCICIOS:</h5>
 
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th> <!-- ejercicios -->
-          <th>Descripción</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 
-        falta llenar estos datosconla configuracion de la base de datos -->
-        {% for ejercicio in ejercicios %}
-          <tr>
-            <td>
-              <input type="radio" name="Seleccionar" value="{{ ejercicio.id }}">
-            </td>
-            <td>{{ ejercicio.id }}</td>
-            <td>{{ ejercicio.nombre }}</td>
-            <td>{{ ejercicio.descripcion }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <button type="submit" class="btn btn-primary">Seleccionar Ejercicio</button>
-</form>
+    <form method="get" action="">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Seleccionar</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ejercicio in ejercicios %}
+                <tr>
+                    <td>
+                        <input type="radio" name="ejercicio_id" value="{{ ejercicio.id }}" required>
+                    </td>
+                    <td>{{ ejercicio.nombre_ejercicio }}</td>
+                    <td>{{ ejercicio.descripcion }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Ver Ejercicio</button>
+    </form>
 </div>
-
 
 {% endblock %}
