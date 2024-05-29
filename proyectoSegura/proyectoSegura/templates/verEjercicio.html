@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block titulo %}EJERCICIO{% endblock %}
+
+{% block encabezado %}EJERCICIO{% endblock %}
+
+{% block contenido %}
+  <form method="post">
+    {% csrf_token %}
+    <div>
+      <label for="id_nombre">Nombre:</label>
+      <input type="text" name="nombreEjercicio" id="nombreEjercicio" required>
+    </div>
+    <div>
+      <label for="id_apellido">Descripcion:</label>
+      <input type="text" name="descripcion" id="descripcion" required>
+    </div>
+    <button type="submit" id="regresar">Regresar</button>
+  </form>
+{% endblock %}
