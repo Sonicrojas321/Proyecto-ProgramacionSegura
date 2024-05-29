@@ -21,7 +21,6 @@ class Usuario(models.Model):
 class Alumno(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=150)
-    carrera = models.CharField(max_length=100)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
 class Profesor(models.Model):
@@ -32,7 +31,7 @@ class Profesor(models.Model):
 class Ejercicio(models.Model):
     nombre_ejercicio = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=500)
-    valor = models.DecimalField(decimal_places=1, max_digits=1)
+    valor = models.IntegerField()
     entrada1 = models.CharField(max_length=100)
     entrada2 = models.CharField(max_length=100)
     entrada3 = models.CharField(max_length=100)
@@ -41,6 +40,7 @@ class Ejercicio(models.Model):
     salida3 = models.CharField(max_length=100)
 
 class Respuesta(models.Model):
+    respuesta = models.TextField(null=True)
     calificacion = models.DecimalField(decimal_places=1, max_digits=1)
     ejercicio = models.ForeignKey(Ejercicio, on_delete=models.DO_NOTHING)
     alumno = models.ForeignKey(Alumno, on_delete=models.DO_NOTHING)
