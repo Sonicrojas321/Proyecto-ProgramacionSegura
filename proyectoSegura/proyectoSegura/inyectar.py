@@ -17,7 +17,7 @@ def decidir_comando(programa: str) -> str:
         if(partes[-1] == 'fasl'): #sbcl lisp
             programa = 'sbcl --noinform --load %s --quit --disable-debugger --end-toplevel-options $@' % programa
         elif(partes[-1] == 'py'): #python
-            programa = 'python %s' % programa
+            programa = 'python3 %s' % programa
         elif(partes[-1] == 'prolog'): #prolog
             programa = 'swipl -f %s -t main -q' % programa
         elif(partes[-1] == 'class'):

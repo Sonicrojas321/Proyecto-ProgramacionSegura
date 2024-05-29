@@ -31,6 +31,13 @@ ALLOWED_HOSTS = ['*']
 LIMITE_INTENTOS_LOGIN = 3
 LIMITE_SEGUNDOS_LOGIN = 60
 
+#COOKIES CONFIGURATION
+SESSION_COOKIE_AGE = 3600 # 1 hora
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True # se destruye la sesión si se cierra el navegador
+
+SESSION_COOKIE_SECURE = True # sólo en producción https
+SESSION_COOKIE_SAMESITE = 'Strict'
+
 # Application definition
 
 INSTALLED_APPS = [

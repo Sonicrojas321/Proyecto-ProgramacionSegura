@@ -7,13 +7,17 @@ class Intentos(models.Model):
     intentos = models.PositiveIntegerField()
     fecha_ultimo_intento = models.DateTimeField()
 
+
+class TelegramBot(models.Model):
+    telegram_chatID = models.CharField(max_length=256)
+    telegram_token = models.CharField(max_length=256)
+
 class Usuario(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=256)
     fecha_ultimo_OTP = models.DateTimeField()
-    telegram_chatID = models.CharField(max_length=256)
-    telegram_token = models.CharField(max_length=256)
-
+    telegram_bot = models.ForeignKey(TelegramBot, on_delete=models.DO_NOTHING, null=True)
+    
 class Alumno(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=150)

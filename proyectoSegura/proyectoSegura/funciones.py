@@ -98,4 +98,6 @@ def puede_loguearse(request) -> bool:
     except: # nunca se ha visto al cliente
         registrar_cliente(ip)
         return True
-    
+
+def crear_entrada(lista_entradas_salidas: list) -> None:
+    pass

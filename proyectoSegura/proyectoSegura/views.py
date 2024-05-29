@@ -1,5 +1,5 @@
 #Views.py
-
+from django.contrib import messages
 from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
@@ -17,7 +17,15 @@ def login(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = models.Usuario.objects.get(username=username, password=password)
+            #Usuario autenticado
+        except:
+            messages.error('Nombre de usuario o contraseña incorrectos')
     return render(request, "login.html")
 
 def registrarAlumno(request) -> HttpResponse:
@@ -29,6 +37,8 @@ def registrarAlumno(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
+    if request.method == 'POST':
+        pass
     return render(request, "registro.html")
 
 def lista_ejercicios(request) -> HttpResponse:
@@ -43,6 +53,14 @@ def lista_ejercicios(request) -> HttpResponse:
     return render(request, "listaejercicios.html")
 
 def definir_ejercicio(request) -> HttpResponse:
+    """Vista con formulario para definición de ejercicio de programación
+
+    Args:
+        request (_type_): Petición
+
+    Returns:
+        HttpResponse: _description_
+    """
     return render (request, "subirEjercicioMaestro.html")
 
 #def login(request):
