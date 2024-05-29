@@ -65,3 +65,6 @@ def definir_ejercicio(request) -> HttpResponse:
 
 #def login(request):
  #   return render(request, "login.html")
+
+def ver_Ejercicio(request) -> HttpResponse:
+    return render (request, "verEjercicio.html")
