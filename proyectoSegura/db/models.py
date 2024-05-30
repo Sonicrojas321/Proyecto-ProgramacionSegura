@@ -15,7 +15,7 @@ class TelegramBot(models.Model):
 class Usuario(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=256)
-    fecha_ultimo_OTP = models.DateTimeField()
+    fecha_ultimo_OTP = models.DateTimeField(null=True)
     telegram_bot = models.ForeignKey(TelegramBot, on_delete=models.DO_NOTHING, null=True)
     
 class Alumno(models.Model):

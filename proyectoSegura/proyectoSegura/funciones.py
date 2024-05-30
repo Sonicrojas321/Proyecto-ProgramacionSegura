@@ -4,6 +4,7 @@ import base64
 from datetime import datetime
 from datetime import timezone
 import os
+import crypt
 from django.shortcuts import redirect
 import requests
 from db import models
@@ -27,6 +28,32 @@ def generar_salt() -> str:
     p = os.urandom(6)
     salt = base64.b64encode(p).decode('utf-8')
     return salt
+
+def crear_password_hasheada(password) -> str:
+    configuracion = '$6$' + generar_salt()
+    hasheo = crypt.crypt(password, configuracion)
+    return hasheo
+
+def password_valido(pass_a_evaluar: str, shadow: str) -> bool:
+    """
+    Determina si pass_a_evaluar es un password válido de acuerdo a una cadena shadow de
+    entrada:
+
+    - pass_a_evaluar: str, password de interés
+    - shadow: str, cadena con el formato completo del archivo shadow, esto es:
+      - $algoritmo$
+      - $salt$
+      - hash
+     Ejemplo:
+       $6$wLn3hfSJdxalxrpH$PZbtfKfDbOU07UTorvtrao4.Rvlpj1lbKFOV6wiRISPmTWptpse9SdZU/d5jd9QYSxpR41z1cqbp2x9Z.IPa3/
+
+    
+    returns: bool, True si el password es válido
+    """
+    _, algoritmo, salt, resumen = shadow.split('$')
+    configuracion = '$%s$%s$' % (algoritmo, salt)
+    shadow_nuevo = crypt.crypt(pass_a_evaluar, configuracion)
+    return shadow_nuevo == shadow
 
 def obtener_ip_cliente(request) -> str:
     """Función que regresa la IP del cliente 

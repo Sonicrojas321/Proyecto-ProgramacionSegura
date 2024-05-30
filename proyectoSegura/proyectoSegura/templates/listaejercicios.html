@@ -1,7 +1,8 @@
 {% extends "baseAlumno.html" %}
 
+{% load static %}
 {% block scripts %}
-<script src="/static/js/seleccionar_ejercicio.js"></script>
+<script src="/static/js/seleccionarEjercicio.js"></script>
 {% endblock %}
 
 {% block titulo %}Lista de Ejercicios{% endblock %}
@@ -11,7 +12,8 @@
 <div class="table-responsive">
     <h5>EJERCICIOS:</h5>
 
-    <form method="get" action="">
+    <form method="post" action="/verEjercicio/">
+        {% csrf_token %}
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>

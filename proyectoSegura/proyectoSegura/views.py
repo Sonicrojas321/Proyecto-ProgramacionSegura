@@ -22,9 +22,12 @@ def login(request) -> HttpResponse:
         password = request.POST.get('password')
 
         try:
-            user = models.Usuario.objects.get(username=username, password=password)
-            #Usuario autenticado
-            request.session['usuario'] = True
+            user = models.Usuario.objects.get(username=username)
+            if funciones.password_valido(password, user.password):
+                #Usuario autenticado
+                request.session['usuario'] = 'True'
+                redirect('/lista/')
+
         except:
             messages.error('Nombre de usuario o contraseña incorrectos')
     return render(request, "login.html")
@@ -45,6 +48,7 @@ def registrarAlumno(request) -> HttpResponse:
         contrasena = request.POST.get('contrasenaAlumno')
         confirm_contrasena = request.POST.get('contrasenaAlumno1')
         if contrasena == confirm_contrasena:
+            contrasena = funciones.crear_password_hasheada(contrasena)
             nuevo_usuario = models.Usuario(
                 username=usuario,
                 password=contrasena
@@ -109,6 +113,9 @@ def definir_ejercicio(request) -> HttpResponse:
  #   return render(request, "login.html")
 
 def ver_Ejercicio(request) -> HttpResponse:
-    id_ejercicio = request.POST.get('id_ejercicio')
-    ejercicio_seleccionado = models.Ejercicio.objects.get(id_ejercicio)
-    return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
+    if request.method == 'POST':
+        id_ejercicio = request.POST.get('ejercicio_id')
+        print(id_ejercicio)
+        ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
+        return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
+    return render(request, "verEjercicio.html")
