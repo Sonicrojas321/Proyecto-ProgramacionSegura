@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from db import models
 from proyectoSegura import settings
-from . import funciones
+from . import funciones, bot_tele
 
 
 def login(request) -> HttpResponse:
@@ -31,7 +31,7 @@ def login(request) -> HttpResponse:
             user = models.Usuario.objects.get(username=username)
             if funciones.password_valido(password, user.password):
                 #Usuario autenticado
-                request.session['logeado'] = True
+                request.session['usuario'] = user.id
                 print('logeado')
                 redirect('/doblefactor/')
             else:
@@ -41,7 +41,7 @@ def login(request) -> HttpResponse:
         except models.Usuario.DoesNotExist:
             error = 'Credenciales inválidas'
             return render(request, 'login.html', {'errores': error})
-    return render(request, "login.html")
+    
 
 def registrar_alumno(request) -> HttpResponse:
     """Vista para registro de usuarios
@@ -131,6 +131,10 @@ def ver_ejercicio(request) -> HttpResponse:
 
 #@funciones.logueado
 def doble_factor(request) -> HttpResponse:
+    if request.method == 'GET':
+        usuario_id = request.session["usuario"]
+        bot_tele.generate_otp()
+        return render(request, "dobleFactor.html")
     if request.method == 'POST':
         caracter1 = request.POST.get('character1')
         caracter2 = request.POST.get('character2')
@@ -139,7 +143,7 @@ def doble_factor(request) -> HttpResponse:
         caracter5 = request.POST.get('character5')
         caracter6 = request.POST.get('character6')
         
-    return render(request, "dobleFactor.html")
+    
 
 
 def logout(request) -> HttpResponse:
