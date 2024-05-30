@@ -5,14 +5,11 @@
 {% block encabezado %}INICIAR SESIÓN{% endblock %}
 
 {% block contenido %}
-{% if messages %}
-<ul class="messages">
-  {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-  {% endfor %}
-</ul>
+{% if errores %}
+      <b style="color:red">{{ errores }}</b>
 {% endif %}
-  <form method="post" action="/lista/">
+
+  <form method="post" action="/doblefactor/">
     {% csrf_token %}
 
     <div class="mb-3">

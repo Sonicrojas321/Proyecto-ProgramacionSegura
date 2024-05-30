@@ -13,9 +13,9 @@ from proyectoSegura import settings
 
 def logueado(fun_a_decorar):
     def interna(request, *args, **kwars):
-        logueado = request.session.get('usuario', False)
+        logueado = request.session.get('logeado', False)
         if not logueado:
-            return redirect('/login')
+            return redirect('/')
         return fun_a_decorar(request, *args, **kwars)
     return interna
 

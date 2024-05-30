@@ -4,6 +4,7 @@ from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from db import models
+from proyectoSegura import settings
 from . import funciones
 
 
@@ -17,22 +18,29 @@ def login(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    if request.method == 'POST':
+    if request.method == 'GET':
+        ip = funciones.obtener_ip_cliente(request)
+        return render(request,"login.html", {'ip':ip})
+    elif request.method == 'POST':
+        if not funciones.puede_loguearse(request):
+            error = 'Agotaste tu límite de intentos, debes esperar %s segundos' % settings.LIMITE_SEGUNDOS_LOGIN
+            return render(request, 'login.html', {'errores': error})
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         try:
             user = models.Usuario.objects.get(username=username)
             if funciones.password_valido(password, user.password):
                 #Usuario autenticado
-                request.session['usuario'] = user.username
+                request.session['logeado'] = True
                 print('logeado')
                 redirect('/doblefactor/')
             else:
-                messages.error('Nombre de usuario o contraseña incorrectos')
+                error = 'Credenciales inválidas'
+                return render(request, 'login.html', {'errores': error})
 
         except:
-            messages.error('Nombre de usuario o contraseña incorrectos')
+            error = 'Credenciales inválidas'
+            return render(request, 'login.html', {'errores': error})
     return render(request, "login.html")
 
 def registrarAlumno(request) -> HttpResponse:
@@ -124,8 +132,16 @@ def ver_Ejercicio(request) -> HttpResponse:
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
     return render(request, "verEjercicio.html")
 
+#@funciones.logueado
 def doble_factor(request) -> HttpResponse:
-
+    if request.method == 'POST':
+        caracter1 = request.POST.get('character1')
+        caracter2 = request.POST.get('character2')
+        caracter3 = request.POST.get('character3')
+        caracter4 = request.POST.get('character4')
+        caracter5 = request.POST.get('character5')
+        caracter6 = request.POST.get('character6')
+        
     return render(request, "dobleFactor.html")
 
 
@@ -138,4 +154,4 @@ def logout(request) -> HttpResponse:
     returns: HttpResponse 
     """
     request.session.flush()
-    return redirect('/login')
+    return redirect('/')
