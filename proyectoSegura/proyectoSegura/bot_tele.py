@@ -33,7 +33,7 @@ def enviar_mensaje(mensaje: str, token:str, chat_id:str) -> bool:
     try: 
         respuesta = requests.get(URL %
                                  (token, chat_id, mensaje))       
-        if not respuesta.status_code != 200:
+        if respuesta.status_code != 200:
             return False
         return True
     except requests.RequestException:

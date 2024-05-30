@@ -129,7 +129,7 @@ def puede_loguearse(request) -> bool:
             actualizar_info_cliente(cliente, cliente.intentos + 1)
             return True
         
-    except Intentos.DoesNotExist: # nunca se ha visto al cliente
+    except models.Intentos.DoesNotExist: # nunca se ha visto al cliente
         registrar_cliente(ip)
         return True
 

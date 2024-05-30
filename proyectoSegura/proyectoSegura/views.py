@@ -31,11 +31,11 @@ def login(request) -> HttpResponse:
             else:
                 messages.error('Nombre de usuario o contraseña incorrectos')
 
-        except:
+        except models.Usuario.DoesNotExist:
             messages.error('Nombre de usuario o contraseña incorrectos')
     return render(request, "login.html")
 
-def registrarAlumno(request) -> HttpResponse:
+def registrar_alumno(request) -> HttpResponse:
     """Vista para registro de usuarios
 
     Args:
@@ -113,10 +113,7 @@ def definir_ejercicio(request) -> HttpResponse:
         return redirect('/lista/')
     return render (request, "subirEjercicioMaestro.html")
 
-#def login(request):
- #   return render(request, "login.html")
-
-def ver_Ejercicio(request) -> HttpResponse:
+def ver_ejercicio(request) -> HttpResponse:
     if request.method == 'POST':
         id_ejercicio = request.POST.get('ejercicio_id')
         print(id_ejercicio)
