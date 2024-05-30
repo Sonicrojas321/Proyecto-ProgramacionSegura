@@ -1,5 +1,3 @@
-#from django.http import HttpResponse, JsonResponse
-#from django.shortcuts import render, redirect
 import base64
 from datetime import datetime
 from datetime import timezone
@@ -51,7 +49,7 @@ def password_valido(pass_a_evaluar: str, shadow: str) -> bool:
     
     returns: bool, True si el password es válido
     """
-    _, algoritmo, salt, resumen = shadow.split('$')
+    _, algoritmo, salt, _ = shadow.split('$')
     configuracion = '$%s$%s$' % (algoritmo, salt)
     shadow_nuevo = crypt.crypt(pass_a_evaluar, configuracion)
     return shadow_nuevo == shadow
@@ -131,7 +129,7 @@ def puede_loguearse(request) -> bool:
             actualizar_info_cliente(cliente, cliente.intentos + 1)
             return True
         
-    except: # nunca se ha visto al cliente
+    except Intentos.DoesNotExist: # nunca se ha visto al cliente
         registrar_cliente(ip)
         return True
 

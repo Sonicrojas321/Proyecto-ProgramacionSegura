@@ -32,7 +32,7 @@ def decidir_comando(programa: str) -> str:
             programa = 'java -cp %s %s' % (dire, programa)
         return programa
 
-def inyect(programa, entrada, max_Time=5): # 2 segundos máximos
+def inyect(programa, entrada, max_time=5): # 2 segundos máximos
     """
     Inyecta una entrada a un programa dado y regresa una tupla con la salida y un codigo de salida
     Hace un chequeo para saber si ejecutarlo con un interprete
@@ -41,7 +41,7 @@ def inyect(programa, entrada, max_Time=5): # 2 segundos máximos
     programa = decidir_comando(programa)
     try:
         process = subprocess.Popen(programa.split(), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        tup = process.communicate(bytes(entrada, encoding), max_Time)
+        tup = process.communicate(bytes(entrada, encoding), max_time)
         output = str(tup[0], encoding) #0 es la salida por defecto
         if process.returncode != 0: #an error ocurred in child process
             return ('Runtime error',1)
