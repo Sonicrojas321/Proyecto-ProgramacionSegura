@@ -1,0 +1,6 @@
+projectKey=proyectoSegura
+serverUrl=https://5b1d-201-175-202-208.ngrok-free.app
+serverVersion=10.4.1.88267
+dashboardUrl=https://5b1d-201-175-202-208.ngrok-free.app/dashboard?id=proyectoSegura
+ceTaskId=c3d16932-755b-49fa-be0b-940f61e79b00
+ceTaskUrl=https://5b1d-201-175-202-208.ngrok-free.app/api/ce/task?id=c3d16932-755b-49fa-be0b-940f61e79b00
