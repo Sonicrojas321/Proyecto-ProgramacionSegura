@@ -12,34 +12,53 @@
   {% endfor %}
 </ul>
 {% endif %}
-  <form method="post">
+<form method="post">
     {% csrf_token %}
 
-    <div class="bg-info border-4 border-warning rounded container">
-        <div class="row pt-4 pb-4 px-2">
-            <div class="col-sm pt3">
-                <input type="text" class="form-control" id="character1" name="character1" maxlength="1" >
+    <div class="bg-light border-4 border-warning rounded container">
+        <div class="row pt-4 pb-4 px-2 justify-content-center">
+            <div class="col-auto">
+                <input type="text" class="form-control token-input" id="character1" name="character1" maxlength="1">
             </div>
-            <div class="col-sm pt3">
-                <input type="text" class="form-control" id="character2" name="character2" maxlength="1" required>
+            <div class="col-auto">
+                <input type="text" class="form-control token-input" id="character2" name="character2" maxlength="1" required>
             </div>
-            <div class="col-sm pt3">
-                <input type="text" class="form-control" id="character3" name="character3" maxlength="1" required>
+            <div class="col-auto">
+                <input type="text" class="form-control token-input" id="character3" name="character3" maxlength="1" required>
             </div>
-            <div class="col-sm pt3">
-                <input type="text" class="form-control" id="character4" name="character4" maxlength="1" required>
+            <div class="col-auto">
+                <input type="text" class="form-control token-input" id="character4" name="character4" maxlength="1" required>
             </div>
-            <div class="col-sm pt3">
-                <input type="text" class="form-control" id="character5" name="character5" maxlength="1" required>
+            <div class="col-auto">
+                <input type="text" class="form-control token-input" id="character5" name="character5" maxlength="1" required>
             </div>
-            <div class="col-sm pt3">
-                <input type="text" class="form-control" id="character6" name="character6" maxlength="1" required>
+            <div class="col-auto">
+                <input type="text" class="form-control token-input" id="character6" name="character6" maxlength="1" required>
             </div>
         </div>
     </div>
     
-    <div class="row pt-4 px-2">
-        <button type="submit" class="btn btn-primary" id="confirmarToken">Confirmar Token</button>
+    <div class="row pt-4 px-2 justify-content-center">
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary btn-sm" id="confirmarToken">Confirmar Token</button>
+        </div>
     </div>
-  </form>
+</form>
+
+<style>
+    .token-input {
+        width: 3rem;
+        height: 3rem;
+        text-align: center;
+        font-size: 1.5rem;
+        margin: 0 0.3rem;
+    }
+    .bg-light {
+        background-color: #f8f9fa !important; /* Gris muy claro */
+    }
+    .btn-sm {
+        font-size: 0.875rem; /* Tamaño de fuente más pequeño */
+        padding: 0.25rem 0.5rem; /* Ajuste de padding para tamaño pequeño */
+    }
+</style>
 {% endblock %}
