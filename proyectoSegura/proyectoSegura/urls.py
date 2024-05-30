@@ -25,6 +25,7 @@ urlpatterns = [
     path('lista/', views.lista_ejercicios),
     path('ejercicioMaestro/', views.definir_ejercicio),
     path('verEjercicio/', views.ver_Ejercicio),
+    path('doblefactor/', views.doble_factor),
     path("logout/", views.logout),
     #path('login/', views.login),
 ]

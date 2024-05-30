@@ -1,0 +1,45 @@
+{% extends 'baseAnonimo.html' %}
+
+{% block titulo %}Ingrese su token{% endblock %}
+
+{% block encabezado %}Ingrese su Token de Telegram{% endblock %}
+
+{% block contenido %}
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="bg-info border-4 border-warning rounded container">
+        <div class="row pt-4 pb-4 px-2">
+            <div class="col-sm pt3">
+                <input type="text" class="form-control" id="character1" name="character1" maxlength="1" >
+            </div>
+            <div class="col-sm pt3">
+                <input type="text" class="form-control" id="character2" name="character2" maxlength="1" required>
+            </div>
+            <div class="col-sm pt3">
+                <input type="text" class="form-control" id="character3" name="character3" maxlength="1" required>
+            </div>
+            <div class="col-sm pt3">
+                <input type="text" class="form-control" id="character4" name="character4" maxlength="1" required>
+            </div>
+            <div class="col-sm pt3">
+                <input type="text" class="form-control" id="character5" name="character5" maxlength="1" required>
+            </div>
+            <div class="col-sm pt3">
+                <input type="text" class="form-control" id="character6" name="character6" maxlength="1" required>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row pt-4 px-2">
+        <button type="submit" class="btn btn-primary" id="confirmarToken">Confirmar Token</button>
+    </div>
+  </form>
+{% endblock %}
