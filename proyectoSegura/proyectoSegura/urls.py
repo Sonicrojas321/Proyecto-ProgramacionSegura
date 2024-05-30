@@ -25,5 +25,6 @@ urlpatterns = [
     path('lista/', views.lista_ejercicios),
     path('ejercicioMaestro/', views.definir_ejercicio),
     path('verEjercicio/', views.ver_Ejercicio),
+    path("logout/", views.logout),
     #path('login/', views.login),
 ]

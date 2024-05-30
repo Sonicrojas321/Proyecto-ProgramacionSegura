@@ -25,8 +25,11 @@ def login(request) -> HttpResponse:
             user = models.Usuario.objects.get(username=username)
             if funciones.password_valido(password, user.password):
                 #Usuario autenticado
-                request.session['usuario'] = 'True'
-                redirect('/lista/')
+                request.session['usuario'] = user.username
+                print('logeado')
+                redirect('/doblefactor/')
+            else:
+                messages.error('Nombre de usuario o contraseña incorrectos')
 
         except:
             messages.error('Nombre de usuario o contraseña incorrectos')
@@ -55,7 +58,8 @@ def registrarAlumno(request) -> HttpResponse:
             )
             nuevo_alumno = models.Alumno(
                 nombre = nombre,
-                apellido = apellidos
+                apellido = apellidos,
+                usuario = nuevo_usuario
             )
             nuevo_usuario.save()
             nuevo_alumno.save()
@@ -119,3 +123,19 @@ def ver_Ejercicio(request) -> HttpResponse:
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
     return render(request, "verEjercicio.html")
+
+def doble_factor(request) -> HttpResponse:
+
+    return render(request, "dobleFactor.html")
+
+
+def logout(request) -> HttpResponse:
+    """
+    Función básica de logout.
+
+    Keyword Arguments:
+    request -- 
+    returns: HttpResponse 
+    """
+    request.session.flush()
+    return redirect('/login')

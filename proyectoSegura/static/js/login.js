@@ -1,5 +1,5 @@
 $(function(){
-	$("#submit").click(function(evento){
+	$("#sesionEnviar").click(function(evento){
 		let mensajes = "";
 
 		if($("#username").val() == ""){

@@ -2,11 +2,6 @@ import crypt
 import base64
 import os
 
-password = 'limitado'
-configuracion = '$6$wLn3hfSJdxalxrpH$'
-
-resumen = crypt.crypt(password, configuracion)
-
 def generar_salt(tamano = 12) -> str:
     """
     Genera salts aleatorios.
