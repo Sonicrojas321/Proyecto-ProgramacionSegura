@@ -1,4 +1,7 @@
 #Views.py
+from datetime import datetime
+from datetime import timezone
+#from time import timezone
 from django.contrib import messages
 from http.client import HTTPResponse
 from django.shortcuts import render, redirect
@@ -33,7 +36,7 @@ def login(request) -> HttpResponse:
                 #Usuario autenticado
                 request.session['usuario'] = user.id
                 print('logeado')
-                redirect('/doblefactor/')
+                return redirect('/doblefactor/')
             else:
                 error = 'Credenciales inválidas'
                 return render(request, 'login.html', {'errores': error})
@@ -133,15 +136,37 @@ def ver_ejercicio(request) -> HttpResponse:
 def doble_factor(request) -> HttpResponse:
     if request.method == 'GET':
         usuario_id = request.session["usuario"]
-        bot_tele.generate_otp()
+        user = models.Usuario.objects.get(id=usuario_id)
+        old_otps = models.UserOTP.objects.filter(usuario=user)#Eliminacion de OTPs antiguos del User
+        old_otps.delete()
+        otp = bot_tele.generate_otp()
+        actual = datetime.now(timezone.utc)
+        new_otp = models.UserOTP(ultimo_OTP=otp, fecha_ultimo_OTP=actual, usuario=user)
+        new_otp.save()
+        bot_tele.enviar_mensaje(otp, user) 
+        print(otp)
         return render(request, "dobleFactor.html")
     if request.method == 'POST':
+        usuario_id = request.session["usuario"]
+        user = models.Usuario.objects.get(id=usuario_id)
         caracter1 = request.POST.get('character1')
         caracter2 = request.POST.get('character2')
         caracter3 = request.POST.get('character3')
         caracter4 = request.POST.get('character4')
         caracter5 = request.POST.get('character5')
         caracter6 = request.POST.get('character6')
+
+        intento_otp = caracter1 + caracter2 + caracter3 + caracter4 + caracter5 + caracter6
+        print(user.username)
+        print(intento_otp)
+        if funciones.validar_token(user, intento_otp):
+            print('Good')
+            request.session["logueado"] = True
+            return redirect('/lista/')
+        else:
+            print('Bad')
+            return redirect('/')
+        #return render(request, "dobleFactor.html")
         
     
 

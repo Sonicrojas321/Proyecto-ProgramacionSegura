@@ -7,11 +7,9 @@ from db import models
 #CHAT_ID = os.environ.get('TELE_CHAT_ID')
 URL = 'https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s'
 
-def obtener_bot(user:str) -> tuple:
-    usuario = models.Usuario.objects.get(username=user)
-    user_token = usuario.telegram_token
-    user_chat = usuario.telegram_chatID
-    return user_token, user_chat
+def obtener_bot(user:object) -> tuple:
+    telegram_bot = models.TelegramBot.objects.get(usuario=user)
+    return telegram_bot
 
 def generate_otp() -> str:
     string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -22,7 +20,7 @@ def generate_otp() -> str:
  
     return OTP
 
-def enviar_mensaje(mensaje: str, token:str, chat_id:str) -> bool:
+def enviar_mensaje(mensaje: str, user: object) -> bool:
     """
     Envía el mensaje establecido al bot configurado en las
     variables constantes.
@@ -30,15 +28,15 @@ def enviar_mensaje(mensaje: str, token:str, chat_id:str) -> bool:
     mensaje: str
     returns: bool, True si se pudo mandar el mensaje, False de lo contrario
     """
+    telegram_bot = obtener_bot(user)
+
     try: 
         respuesta = requests.get(URL %
-                                 (token, chat_id, mensaje))       
+                                 (telegram_bot.telegram_token, telegram_bot.telegram_chatID, mensaje))
         if respuesta.status_code != 200:
             return False
         return True
     except requests.RequestException:
         return False
 
-def asignar_bot() -> object:
-    usuarios = models.Usuario.objects.all()
     

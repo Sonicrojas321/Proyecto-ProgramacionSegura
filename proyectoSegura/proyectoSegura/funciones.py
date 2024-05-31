@@ -105,6 +105,18 @@ def registrar_cliente(ip: str) -> None:
                        fecha_ultimo_intento=fecha)
     registro.save()
 
+def validar_token(user, tokensito) -> bool:
+    try:
+        token = models.UserOTP.objects.get(usuario=user)
+        print(esta_en_ventana(token.fecha_ultimo_OTP, settings.LIMITE_SEGUNDOS_TOKEN))
+        if esta_en_ventana(token.fecha_ultimo_OTP, settings.LIMITE_SEGUNDOS_TOKEN) and tokensito == token.ultimo_OTP:
+            token.delete()
+            return True
+        else:
+            token.delete()
+            return False
+    except:
+        return False
 
 def puede_loguearse(request) -> bool:
     """
