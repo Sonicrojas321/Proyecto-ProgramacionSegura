@@ -61,6 +61,8 @@ def registrar_alumno(request):
         usuario = request.POST.get('usuarioAlumno')
         contrasena = request.POST.get('contrasenaAlumno')
         confirm_contrasena = request.POST.get('contrasenaAlumno1')
+        tokenusuario = request.POST.get ('token_Usuario')
+        botchat = request.POST.get ('bot_usuario')
 
         # Validación de la contraseña
         if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$', contrasena):
@@ -73,6 +75,11 @@ def registrar_alumno(request):
 
         # Crear el usuario y el alumno
         contrasena = funciones.crear_password_hasheada(contrasena)
+        nuevo_telegram_bot = models.TelegramBot(
+
+            telegram_chatID = botchat,
+            telegram_token = tokenusuario,
+        )
         nuevo_usuario = models.Usuario(
             username=usuario,
             password=contrasena
@@ -84,6 +91,7 @@ def registrar_alumno(request):
         )
         nuevo_usuario.save()
         nuevo_alumno.save()
+        nuevo_telegram_bot.save()
         messages.success(request, 'Alumno registrado exitosamente.')
         return redirect('/')
 
