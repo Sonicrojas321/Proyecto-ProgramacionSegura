@@ -1,10 +1,14 @@
 #Views.py
+from datetime import datetime
+from datetime import timezone
+#from time import timezone
 from django.contrib import messages
 from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from db import models
-from . import funciones
+from proyectoSegura import settings
+from . import funciones, bot_tele
 
 
 def login(request) -> HttpResponse:
@@ -17,25 +21,32 @@ def login(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    if request.method == 'POST':
+    if request.method == 'GET':
+        ip = funciones.obtener_ip_cliente(request)
+        return render(request,"login.html", {'ip':ip})
+    elif request.method == 'POST':
+        if not funciones.puede_loguearse(request):
+            error = 'Agotaste tu límite de intentos, debes esperar %s segundos' % settings.LIMITE_SEGUNDOS_LOGIN
+            return render(request, 'login.html', {'errores': error})
         username = request.POST.get('username')
         password = request.POST.get('password')
-
         try:
             user = models.Usuario.objects.get(username=username)
             if funciones.password_valido(password, user.password):
                 #Usuario autenticado
-                request.session['usuario'] = user.username
+                request.session['usuario'] = user.id
                 print('logeado')
-                redirect('/doblefactor/')
+                return redirect('/doblefactor/')
             else:
-                messages.error('Nombre de usuario o contraseña incorrectos')
+                error = 'Credenciales inválidas'
+                return render(request, 'login.html', {'errores': error})
 
-        except:
-            messages.error('Nombre de usuario o contraseña incorrectos')
-    return render(request, "login.html")
+        except models.Usuario.DoesNotExist:
+            error = 'Credenciales inválidas'
+            return render(request, 'login.html', {'errores': error})
+    
 
-def registrarAlumno(request) -> HttpResponse:
+def registrar_alumno(request) -> HttpResponse:
     """Vista para registro de usuarios
 
     Args:
@@ -113,10 +124,7 @@ def definir_ejercicio(request) -> HttpResponse:
         return redirect('/lista/')
     return render (request, "subirEjercicioMaestro.html")
 
-#def login(request):
- #   return render(request, "login.html")
-
-def ver_Ejercicio(request) -> HttpResponse:
+def ver_ejercicio(request) -> HttpResponse:
     if request.method == 'POST':
         id_ejercicio = request.POST.get('ejercicio_id')
         print(id_ejercicio)
@@ -124,9 +132,43 @@ def ver_Ejercicio(request) -> HttpResponse:
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
     return render(request, "verEjercicio.html")
 
+#@funciones.logueado
 def doble_factor(request) -> HttpResponse:
+    if request.method == 'GET':
+        usuario_id = request.session["usuario"]
+        user = models.Usuario.objects.get(id=usuario_id)
+        old_otps = models.UserOTP.objects.filter(usuario=user)#Eliminacion de OTPs antiguos del User
+        old_otps.delete()
+        otp = bot_tele.generate_otp()
+        actual = datetime.now(timezone.utc)
+        new_otp = models.UserOTP(ultimo_OTP=otp, fecha_ultimo_OTP=actual, usuario=user)
+        new_otp.save()
+        bot_tele.enviar_mensaje(otp, user) 
+        print(otp)
+        return render(request, "dobleFactor.html")
+    if request.method == 'POST':
+        usuario_id = request.session["usuario"]
+        user = models.Usuario.objects.get(id=usuario_id)
+        caracter1 = request.POST.get('character1')
+        caracter2 = request.POST.get('character2')
+        caracter3 = request.POST.get('character3')
+        caracter4 = request.POST.get('character4')
+        caracter5 = request.POST.get('character5')
+        caracter6 = request.POST.get('character6')
 
-    return render(request, "dobleFactor.html")
+        intento_otp = caracter1 + caracter2 + caracter3 + caracter4 + caracter5 + caracter6
+        print(user.username)
+        print(intento_otp)
+        if funciones.validar_token(user, intento_otp):
+            print('Good')
+            request.session["logueado"] = True
+            return redirect('/lista/')
+        else:
+            print('Bad')
+            return redirect('/')
+        #return render(request, "dobleFactor.html")
+        
+    
 
 
 def logout(request) -> HttpResponse:
@@ -138,4 +180,4 @@ def logout(request) -> HttpResponse:
     returns: HttpResponse 
     """
     request.session.flush()
-    return redirect('/login')
+    return redirect('/')

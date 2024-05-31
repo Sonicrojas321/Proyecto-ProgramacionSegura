@@ -5,7 +5,7 @@ import sys
 CASE_BREAK = '$$$$$$'
 INPUT_BREAK = '!!!!!!'
 
-def evaluar(programa, arCasos, maxTime=5):
+def evaluar(programa, ar_casos, max_time=5):
     """
     Programa ya es el compilado o script
     maxTime es para establecer en segundos el tiempo máximo de ejecución
@@ -14,11 +14,11 @@ def evaluar(programa, arCasos, maxTime=5):
     """
     entrada = '' #la cadena total que se enviara
     salida = [] #para tenerla declarada por si el scope
-    salidaEsperada = '' #para ir guardando lo que se lee en el archivo
-    outputEval = False #se activa cuando se evalua el output
+    salida_esperada = '' #para ir guardando lo que se lee en el archivo
+    output_eval = False #se activa cuando se evalua el output
     res = []  #para guardar los resultados de cada caso
-    for line in open(arCasos):
-        messyLine = line #no quitar saltos de línea ni nada, para comparar con salida esperada (tienen que ser exactametne iguales)
+    for line in open(ar_casos):
+        messy_line = line #no quitar saltos de línea ni nada, para comparar con salida esperada (tienen que ser exactametne iguales)
         line = line.strip() #quitar saltos de línea al final así como espacios extra, para evitar posibles errores en el input y facilitar el proceso
 
         if(line == CASE_BREAK and salida == []): #es la primera línea
@@ -29,22 +29,22 @@ def evaluar(programa, arCasos, maxTime=5):
 
         if line == INPUT_BREAK: #dejar de llenar la entrada he inyectar
             
-            salida = inyectar.inyect(programa, entrada, maxTime)
-            outputEval = True
+            salida = inyectar.inyect(programa, entrada, max_time)
+            output_eval = True
             entrada = '' #restart input
 
         elif line == CASE_BREAK: #cambiar banderas y evaluar
-            outputEval = False
+            output_eval = False
             if salida[1] != 0: # 0 es sin errores
                 res.append(salida[0]) #el tipo de error
-            elif salida[0] == salidaEsperada or salida[0].strip() == salidaEsperada.strip(): #sometimes the new lines must be preserved
+            elif salida[0] == salida_esperada or salida[0].strip() == salida_esperada.strip(): #sometimes the new lines must be preserved
                 res.append(True)
             else:
                 res.append(False)
-            salidaEsperada = '' #restart output
+            salida_esperada = '' #restart output
 
-        elif outputEval:
-            salidaEsperada += messyLine
+        elif output_eval:
+            salida_esperada += messy_line
 
         else: #input reconstruction
             if line.strip().startswith('['): #si es una lista prolog no se quieren saltos de linea

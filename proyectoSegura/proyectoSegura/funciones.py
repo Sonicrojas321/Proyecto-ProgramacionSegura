@@ -1,5 +1,3 @@
-#from django.http import HttpResponse, JsonResponse
-#from django.shortcuts import render, redirect
 import base64
 from datetime import datetime
 from datetime import timezone
@@ -13,9 +11,9 @@ from proyectoSegura import settings
 
 def logueado(fun_a_decorar):
     def interna(request, *args, **kwars):
-        logueado = request.session.get('usuario', False)
+        logueado = request.session.get('logeado', False)
         if not logueado:
-            return redirect('/login')
+            return redirect('/')
         return fun_a_decorar(request, *args, **kwars)
     return interna
 
@@ -51,7 +49,7 @@ def password_valido(pass_a_evaluar: str, shadow: str) -> bool:
     
     returns: bool, True si el password es válido
     """
-    _, algoritmo, salt, resumen = shadow.split('$')
+    _, algoritmo, salt, _ = shadow.split('$')
     configuracion = '$%s$%s$' % (algoritmo, salt)
     shadow_nuevo = crypt.crypt(pass_a_evaluar, configuracion)
     return shadow_nuevo == shadow
@@ -107,6 +105,18 @@ def registrar_cliente(ip: str) -> None:
                        fecha_ultimo_intento=fecha)
     registro.save()
 
+def validar_token(user, tokensito) -> bool:
+    try:
+        token = models.UserOTP.objects.get(usuario=user)
+        print(esta_en_ventana(token.fecha_ultimo_OTP, settings.LIMITE_SEGUNDOS_TOKEN))
+        if esta_en_ventana(token.fecha_ultimo_OTP, settings.LIMITE_SEGUNDOS_TOKEN) and tokensito == token.ultimo_OTP:
+            token.delete()
+            return True
+        else:
+            token.delete()
+            return False
+    except:
+        return False
 
 def puede_loguearse(request) -> bool:
     """
@@ -131,7 +141,7 @@ def puede_loguearse(request) -> bool:
             actualizar_info_cliente(cliente, cliente.intentos + 1)
             return True
         
-    except: # nunca se ha visto al cliente
+    except models.Intentos.DoesNotExist: # nunca se ha visto al cliente
         registrar_cliente(ip)
         return True
 
