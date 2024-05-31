@@ -45,8 +45,7 @@ def login(request) -> HttpResponse:
             error = 'Credenciales inválidas'
             return render(request, 'login.html', {'errores': error})
     
-
-def registrar_alumno(request) -> HttpResponse:
+def registrar_alumno(request):
     """Vista para registro de usuarios
 
     Args:
@@ -61,22 +60,34 @@ def registrar_alumno(request) -> HttpResponse:
         usuario = request.POST.get('usuarioAlumno')
         contrasena = request.POST.get('contrasenaAlumno')
         confirm_contrasena = request.POST.get('contrasenaAlumno1')
-        if contrasena == confirm_contrasena:
-            contrasena = funciones.crear_password_hasheada(contrasena)
-            nuevo_usuario = models.Usuario(
-                username=usuario,
-                password=contrasena
-            )
-            nuevo_alumno = models.Alumno(
-                nombre = nombre,
-                apellido = apellidos,
-                usuario = nuevo_usuario
-            )
-            nuevo_usuario.save()
-            nuevo_alumno.save()
-            return redirect('/')
+
+        # Validación de la contraseña
+        if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$', contrasena):
+            messages.error(request, 'La contraseña debe tener al menos 10 caracteres, incluyendo mayúsculas, minúsculas, dígitos y al menos un carácter especial.')
+            return render(request, 'registro.html', request.POST)
+
+        if contrasena != confirm_contrasena:
+            messages.error(request, 'Las contraseñas no coinciden.')
+            return render(request, 'registro.html', request.POST)
+
+        # Crear el usuario y el alumno
+        contrasena = funciones.crear_password_hasheada(contrasena)
+        nuevo_usuario = models.Usuario(
+            username=usuario,
+            password=contrasena
+        )
+        nuevo_alumno = models.Alumno(
+            nombre=nombre,
+            apellido=apellidos,
+            usuario=nuevo_usuario
+        )
+        nuevo_usuario.save()
+        nuevo_alumno.save()
+        messages.success(request, 'Alumno registrado exitosamente.')
+        return redirect('/')
 
     return render(request, "registro.html")
+
 
 def lista_ejercicios(request) -> HttpResponse:
     """Vista que regresa la página donde se mostrarán el listado de ejercicios
