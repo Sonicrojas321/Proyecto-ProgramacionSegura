@@ -1,5 +1,10 @@
 {% extends 'baseAnonimo.html' %}
 
+{% load static %}
+{% block scripts %}
+<script src="/static/js/registro.js"></script>
+{% endblock %}
+
 {% block titulo %}Registro de alumno{% endblock %}
 
 {% block encabezado %}Registro de Alumno{% endblock %}
@@ -12,27 +17,28 @@
   {% endfor %}
 </ul>
 {% endif %}
-  <form method="post">
+  <form method="post" id="registroForm">
     {% csrf_token %}
 
     <div class="mb-3">
       <label for="nombreAlumno" class="form-label">Nombre o Nombres:</label>
-      <input type="text" class="form-control" id="nombreAlumno" name="nombreAlumno" required>
+      <input type="text" class="form-control" id="nombreAlumno" name="nombreAlumno" value="{{ nombreAlumno }}" required>
     </div>
 
     <div class="mb-3">
       <label for="apellidosAlumno" class="form-label">Apellidos:</label>
-      <input type="text" class="form-control" id="apellidosAlumno" name="apellidosAlumno" required>
+      <input type="text" class="form-control" id="apellidosAlumno" name="apellidosAlumno" value="{{ apellidosAlumno }}" required>
     </div>
 
     <div class="mb-3">
       <label for="usuarioAlumno" class="form-label">Usuario:</label>
-      <input type="text" class="form-control" id="usuarioAlumno" name="usuarioAlumno" required>
+      <input type="text" class="form-control" id="usuarioAlumno" name="usuarioAlumno" value="{{ usuarioAlumno }}" required>
     </div>
 
     <div class="mb-3">
       <label for="contrasenaAlumno" class="form-label">Contraseña:</label>
       <input type="password" class="form-control" id="contrasenaAlumno" name="contrasenaAlumno" required>
+      <div class="form-text">La contraseña debe tener al menos 10 caracteres, incluyendo mayúsculas, minúsculas, dígitos y al menos un carácter especial.</div>
     </div>
 
     <div class="mb-3">
@@ -42,4 +48,7 @@
 
     <button type="submit" class="btn btn-primary" id="alumnoEnviar">Registrar Alumno</button>
   </form>
+ 
+
 {% endblock %}
+
