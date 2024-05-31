@@ -87,8 +87,12 @@ def lista_ejercicios(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    ejercicios = models.Ejercicio.objects.all()
-    return render(request, "listaejercicios.html", {'ejercicios':ejercicios})
+    if request.method == 'GET':
+        ejercicios = models.Ejercicio.objects.all()
+        return render(request, "listaejercicios.html", {'ejercicios':ejercicios})
+    elif request.method == 'POST':
+        ejercicios = models.Ejercicio.objects.all()
+        return render(request, "listaejercicios.html", {'ejercicios':ejercicios})
 
 def definir_ejercicio(request) -> HttpResponse:
     """Vista con formulario para definición de ejercicio de programación
@@ -130,7 +134,7 @@ def ver_ejercicio(request) -> HttpResponse:
         print(id_ejercicio)
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
-    return render(request, "verEjercicio.html")
+    #return render(request, "verEjercicio.html")
 
 #@funciones.logueado
 def doble_factor(request) -> HttpResponse:

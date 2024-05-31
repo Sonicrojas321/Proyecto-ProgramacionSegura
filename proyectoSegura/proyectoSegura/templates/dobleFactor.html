@@ -18,19 +18,19 @@
     <div class="bg-light border-4 border-warning rounded container">
         <div class="row pt-4 pb-4 px-2 justify-content-center">
             <div class="col-auto">
-                <input type="text" class="form-control token-input" id="character1" name="character1" maxlength="1">
+                <input type="text" class="form-control token-input" id="character1" name="character1" maxlength="1" required oninput="siguienteInput(this)">
             </div>
             <div class="col-auto">
-                <input type="text" class="form-control token-input" id="character2" name="character2" maxlength="1" required>
+                <input type="text" class="form-control token-input" id="character2" name="character2" maxlength="1" required oninput="siguienteInput(this)">
             </div>
             <div class="col-auto">
-                <input type="text" class="form-control token-input" id="character3" name="character3" maxlength="1" required>
+                <input type="text" class="form-control token-input" id="character3" name="character3" maxlength="1" required oninput="siguienteInput(this)">
             </div>
             <div class="col-auto">
-                <input type="text" class="form-control token-input" id="character4" name="character4" maxlength="1" required>
+                <input type="text" class="form-control token-input" id="character4" name="character4" maxlength="1" required oninput="siguienteInput(this)">
             </div>
             <div class="col-auto">
-                <input type="text" class="form-control token-input" id="character5" name="character5" maxlength="1" required>
+                <input type="text" class="form-control token-input" id="character5" name="character5" maxlength="1" required oninput="siguienteInput(this)">
             </div>
             <div class="col-auto">
                 <input type="text" class="form-control token-input" id="character6" name="character6" maxlength="1" required>
@@ -61,4 +61,13 @@
         padding: 0.25rem 0.5rem; /* Ajuste de padding para tamaño pequeño */
     }
 </style>
+
+<script>
+    function siguienteInput(inputActual) {
+        const inputs = document.querySelectorAll("input[type='text']");
+        const indiceActual = Array.from(inputs).indexOf(inputActual);
+        const siguienteIndice = (indiceActual + 1) % inputs.length;
+        inputs[siguienteIndice].focus();
+    }
+    </script>
 {% endblock %}

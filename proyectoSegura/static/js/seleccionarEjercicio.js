@@ -18,7 +18,7 @@ $(function(){
 
     $('#seleccionar_ejercicio').click(function(){
        $.post("/verEjercicio/",
-        {id_ejercicio: $('#ejercicio_id').val(),csrfmiddlewaretoken: csrftoken},
+        {csrfmiddlewaretoken: csrftoken},
         function(data, status){
             if(status == "error"){
                 if(data.status != "OK"){
