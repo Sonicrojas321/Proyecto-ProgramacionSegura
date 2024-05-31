@@ -11,9 +11,17 @@ from proyectoSegura import settings
 
 def logueado(fun_a_decorar):
     def interna(request, *args, **kwars):
-        logueado = request.session.get('logeado', False)
+        logueado = request.session.get('logueado', False)
         if not logueado:
             return redirect('/')
+        return fun_a_decorar(request, *args, **kwars)
+    return interna
+
+def notoken(fun_a_decorar):
+    def interna(request, *args, **kwars):
+        logueado = request.session.get('notoken', False)
+        if not logueado:
+            return redirect('/lista/')
         return fun_a_decorar(request, *args, **kwars)
     return interna
 

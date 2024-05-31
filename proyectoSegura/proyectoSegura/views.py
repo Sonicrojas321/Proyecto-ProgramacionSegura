@@ -36,6 +36,7 @@ def login(request) -> HttpResponse:
             if funciones.password_valido(password, user.password):
                 #Usuario autenticado
                 request.session['usuario'] = user.id
+                request.session["notoken"] = True
                 print('logeado')
                 return redirect('/doblefactor/')
             else:
@@ -45,7 +46,8 @@ def login(request) -> HttpResponse:
         except models.Usuario.DoesNotExist:
             error = 'Credenciales inválidas'
             return render(request, 'login.html', {'errores': error})
-    
+
+
 def registrar_alumno(request):
     """Vista para registro de usuarios
 
@@ -89,7 +91,7 @@ def registrar_alumno(request):
 
     return render(request, "registro.html")
 
-
+@funciones.logueado
 def lista_ejercicios(request) -> HttpResponse:
     """Vista que regresa la página donde se mostrarán el listado de ejercicios
 
@@ -106,6 +108,7 @@ def lista_ejercicios(request) -> HttpResponse:
         ejercicios = models.Ejercicio.objects.all()
         return render(request, "listaejercicios.html", {'ejercicios':ejercicios})
 
+@funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
     """Vista con formulario para definición de ejercicio de programación
 
@@ -140,6 +143,7 @@ def definir_ejercicio(request) -> HttpResponse:
         return redirect('/lista/')
     return render (request, "subirEjercicioMaestro.html")
 
+@funciones.logueado
 def ver_ejercicio(request) -> HttpResponse:
     if request.method == 'POST':
         id_ejercicio = request.POST.get('ejercicio_id')
@@ -148,7 +152,7 @@ def ver_ejercicio(request) -> HttpResponse:
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
     #return render(request, "verEjercicio.html")
 
-#@funciones.logueado
+@funciones.notoken
 def doble_factor(request) -> HttpResponse:
     if request.method == 'GET':
         usuario_id = request.session["usuario"]
@@ -178,6 +182,7 @@ def doble_factor(request) -> HttpResponse:
         if funciones.validar_token(user, intento_otp):
             print('Good')
             request.session["logueado"] = True
+            request.session["notoken"] = False
             return redirect('/lista/')
         else:
             print('Bad')

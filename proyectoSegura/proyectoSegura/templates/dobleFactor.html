@@ -1,5 +1,10 @@
 {% extends 'baseAnonimo.html' %}
 
+{% load static %}
+{% block scripts %}
+<script src="/static/js/doblefactor.js"></script>
+{% endblock %}
+
 {% block titulo %}Ingrese su token{% endblock %}
 
 {% block encabezado %}Ingrese su Token de Telegram{% endblock %}
@@ -62,12 +67,4 @@
     }
 </style>
 
-<script>
-    function siguienteInput(inputActual) {
-        const inputs = document.querySelectorAll("input[type='text']");
-        const indiceActual = Array.from(inputs).indexOf(inputActual);
-        const siguienteIndice = (indiceActual + 1) % inputs.length;
-        inputs[siguienteIndice].focus();
-    }
-    </script>
 {% endblock %}
