@@ -1,7 +1,7 @@
 #Views.py
 from datetime import datetime
 from datetime import timezone
-import re
+import re, requests
 from django.contrib import messages
 from http.client import HTTPResponse
 from django.shortcuts import render, redirect
@@ -64,6 +64,17 @@ def registrar_alumno(request):
         confirm_contrasena = request.POST.get('contrasenaAlumno1')
         tokenusuario = request.POST.get ('token_Usuario')
         botchat = request.POST.get ('bot_Usuario')
+   # Validación del reCAPTCHA
+        data = {
+            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
+
+        if not result['success']:
+            messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+            return render(request, 'registro.html', {'nombreAlumno': nombre, 'apellidosAlumno': apellidos, 'usuarioAlumno': usuario})
 
         # Validación de la contraseña
         if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$', contrasena):

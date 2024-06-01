@@ -3,6 +3,8 @@
 {% load static %}
 {% block scripts %}
 <script src="/static/js/registro.js"></script>
+<script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+
 {% endblock %}
 
 {% block titulo %}Registro de alumno{% endblock %}
@@ -53,6 +55,7 @@
       <label for="bot_Usuario" class="form-label">ingresa tu chat ID del bot:</label>
       <input type="text" class="form-control" id="bot_Usuario" name="bot_Usuario" required>
     </div>
+    <div class="g-recaptcha" data-sitekey="6Lco9u0pAAAAAICF8DnYQ5XfG-469kkD4I4R34ty" data-action="LOGIN"></div>
 
     <button type="submit" class="btn btn-primary" id="alumnoEnviar">Registrar Alumno</button>
   </form>

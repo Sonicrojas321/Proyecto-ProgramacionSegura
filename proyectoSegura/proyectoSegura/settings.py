@@ -39,7 +39,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True # se destruye la sesión si se cierra el 
 SESSION_COOKIE_SECURE = True # sólo en producción https
 SESSION_COOKIE_SAMESITE = 'Strict'
 
-# Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'db',
+    'django_recaptcha',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -143,3 +145,8 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# ReCaptcha v2
+RECAPTCHA_PUBLIC_KEY = '6Lco9u0pAAAAAICF8DnYQ5XfG-469kkD4I4R34ty'
+
+RECAPTCHA_PRIVATE_KEY = '6Lco9u0pAAAAAI5TZZFUI450kcf7VOuiiYrgU4rs'
+# Application definition
