@@ -1,5 +1,9 @@
 {% extends 'baseAnonimo.html' %}
+{% load static %}
+{% block scripts %}
+<script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 
+{% endblock %}
 {% block titulo %}INICIAR SESIÓN {% endblock %}
 
 {% block encabezado %}INICIAR SESIÓN{% endblock %}
@@ -21,6 +25,8 @@
       <label for="password" class="form-label">Contraseña:</label>
       <input type="password" class="form-control" id="password" name="password" required>
     </div>
+    
+    <div class="g-recaptcha" data-sitekey="6Lco9u0pAAAAAICF8DnYQ5XfG-469kkD4I4R34ty" data-action="LOGIN"></div>
 
 
     <button type="submit" class="btn btn-primary" id="sesionEnviar">Iniciar sesión</button>
