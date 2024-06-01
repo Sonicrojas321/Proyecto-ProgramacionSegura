@@ -123,7 +123,7 @@ def validar_token(user, tokensito) -> bool:
         else:
             token.delete()
             return False
-    except:
+    except models.UserOTP.DoesNotExist:
         return False
 
 def puede_loguearse(request) -> bool:

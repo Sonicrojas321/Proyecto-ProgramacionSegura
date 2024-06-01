@@ -10,13 +10,11 @@ $(document).ready(function() {
             if (!passwordPattern.test(password)) {
                 alert('La contraseña no cumple con los requisitos. Debe tener al menos 10 caracteres, incluyendo mayúsculas, minúsculas, dígitos y al menos un carácter especial.');
                 event.preventDefault();
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                alert('Las contraseñas no coinciden.');
-                event.preventDefault();
-                return;
+                if (password !== confirmPassword) {
+                    alert('Las contraseñas no coinciden.');
+                    event.preventDefault();
+                    return;
+                }
             }
         });
     }
