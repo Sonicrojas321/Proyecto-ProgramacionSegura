@@ -64,7 +64,7 @@ def registrar_alumno(request):
         contrasena = request.POST.get('contrasenaAlumno')
         confirm_contrasena = request.POST.get('contrasenaAlumno1')
         tokenusuario = request.POST.get ('token_Usuario')
-        botchat = request.POST.get ('bot_usuario')
+        botchat = request.POST.get ('bot_Usuario')
 
         # Validación de la contraseña
         if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$', contrasena):
@@ -84,16 +84,18 @@ def registrar_alumno(request):
         )
         nuevo_usuario = models.Usuario(
             username=usuario,
-            password=contrasena
+            password=contrasena,
+            telegram_bot = nuevo_telegram_bot
         )
         nuevo_alumno = models.Alumno(
             nombre=nombre,
             apellido=apellidos,
             usuario=nuevo_usuario
         )
+        nuevo_telegram_bot.save()
         nuevo_usuario.save()
         nuevo_alumno.save()
-        nuevo_telegram_bot.save()
+        
         messages.success(request, 'Alumno registrado exitosamente.')
         return redirect('/')
 
@@ -194,10 +196,18 @@ def doble_factor(request) -> HttpResponse:
             return redirect('/lista/')
         else:
             print('Bad')
+            messages.error('Try again later')
             return redirect('/')
         #return render(request, "dobleFactor.html")
         
-    
+def tarea_revisada(request):
+    if request.method == 'GET':
+        redirect('/lista/')
+    if request.method == 'POST':
+        id_ejercicio = request.POST.get('id_ejercicio')
+        ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
+        codigo = request.POST.get('codigo')
+        
 
 
 def logout(request) -> HttpResponse:

@@ -14,10 +14,18 @@
 </head>
 
 <body class="bg-light">
-
+    
 <header class="container-fluid text-center bg-primary pt-5 pb-3 mt-3 mb-3 rounded text-white">
     <h1>{% block encabezado %}{% endblock %}</h1>
 </header>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 <section class="container mt-5">
     <div class="row justify-content-center">

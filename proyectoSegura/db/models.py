@@ -11,7 +11,6 @@ class Intentos(models.Model):
 class TelegramBot(models.Model):
     telegram_chatID = models.CharField(max_length=256)
     telegram_token = models.CharField(max_length=256)
-    Asignado = models.BooleanField(default=False)
 
 class Usuario(models.Model):
     username = models.CharField(max_length=100)
