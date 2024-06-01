@@ -2,7 +2,6 @@
 from datetime import datetime
 from datetime import timezone
 import re
-#from time import timezone
 from django.contrib import messages
 from http.client import HTTPResponse
 from django.shortcuts import render, redirect
@@ -109,12 +108,9 @@ def lista_ejercicios(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    if request.method == 'GET':
+    if request.method in ['GET', 'POST']:
         ejercicios = models.Ejercicio.objects.all()
-        return render(request, "listaejercicios.html", {'ejercicios':ejercicios})
-    elif request.method == 'POST':
-        ejercicios = models.Ejercicio.objects.all()
-        return render(request, "listaejercicios.html", {'ejercicios':ejercicios})
+        return render(request, "listaejercicios.html", {'ejercicios': ejercicios})
 
 @funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
@@ -158,7 +154,6 @@ def ver_ejercicio(request) -> HttpResponse:
         print(id_ejercicio)
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
-    #return render(request, "verEjercicio.html")
 
 @funciones.notoken
 def doble_factor(request) -> HttpResponse:
@@ -195,9 +190,6 @@ def doble_factor(request) -> HttpResponse:
         else:
             print('Bad')
             return redirect('/')
-        #return render(request, "dobleFactor.html")
-        
-    
 
 
 def logout(request) -> HttpResponse:
