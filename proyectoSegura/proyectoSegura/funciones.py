@@ -153,5 +153,14 @@ def puede_loguearse(request) -> bool:
         registrar_cliente(ip)
         return True
 
-def crear_entrada(lista_entradas_salidas: list) -> None:
-    pass
+def crear_archivo_entrada(ejercicio: object) -> None:
+    entradas = []
+    salidas = []
+    entradas.append(ejercicio.entrada1)
+    entradas.append(ejercicio.entrada2)
+    entradas.append(ejercicio.entrada3)
+    salidas.append(ejercicio.salida1)
+    salidas.append(ejercicio.salida2)
+    salidas.append(ejercicio.salida3)
+
+    
