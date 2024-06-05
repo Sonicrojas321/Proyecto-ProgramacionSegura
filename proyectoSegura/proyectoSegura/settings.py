@@ -38,6 +38,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True # se destruye la sesión si se cierra el 
 
 SESSION_COOKIE_SECURE = True # sólo en producción https
 SESSION_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_HTTPONLY = True 
 
 
 
