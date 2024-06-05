@@ -62,9 +62,11 @@ def registrar_alumno(request):
         usuario = request.POST.get('usuarioAlumno')
         contrasena = request.POST.get('contrasenaAlumno')
         confirm_contrasena = request.POST.get('contrasenaAlumno1')
-        tokenusuario = request.POST.get ('token_Usuario')
-        botchat = request.POST.get ('bot_Usuario')
-   # Validación del reCAPTCHA
+        tokenusuario = request.POST.get('token_Usuario')
+        botchat = request.POST.get('bot_Usuario')
+        recaptcha_response = request.POST.get('g-recaptcha-response')  # Obtén el recaptcha response
+
+        # Validación del reCAPTCHA
         data = {
             'secret': settings.RECAPTCHA_PRIVATE_KEY,
             'response': recaptcha_response
@@ -72,7 +74,7 @@ def registrar_alumno(request):
         r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
         result = r.json()
 
-        if not result['success']:
+        if not result.get('success'):
             messages.error(request, 'Invalid reCAPTCHA. Please try again.')
             return render(request, 'registro.html', {'nombreAlumno': nombre, 'apellidosAlumno': apellidos, 'usuarioAlumno': usuario})
 
@@ -88,14 +90,13 @@ def registrar_alumno(request):
         # Crear el usuario y el alumno
         contrasena = funciones.crear_password_hasheada(contrasena)
         nuevo_telegram_bot = models.TelegramBot(
-
-            telegram_chatID = botchat,
-            telegram_token = tokenusuario,
+            telegram_chatID=botchat,
+            telegram_token=tokenusuario,
         )
         nuevo_usuario = models.Usuario(
             username=usuario,
             password=contrasena,
-            telegram_bot = nuevo_telegram_bot
+            telegram_bot=nuevo_telegram_bot
         )
         nuevo_alumno = models.Alumno(
             nombre=nombre,
@@ -105,11 +106,11 @@ def registrar_alumno(request):
         nuevo_telegram_bot.save()
         nuevo_usuario.save()
         nuevo_alumno.save()
-        
+
         messages.success(request, 'Alumno registrado exitosamente.')
         return redirect('/')
 
-    return render(request, "registro.html")
+    return render(request, "registro.html", {'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY})
 
 @funciones.logueado
 def lista_ejercicios(request) -> HttpResponse:
@@ -202,7 +203,7 @@ def doble_factor(request) -> HttpResponse:
             return redirect('/lista/')
         else:
             print('Bad')
-            messages.error('Try again later')
+            messages.error(request,'Try again later')
             return redirect('/')
         #return render(request, "dobleFactor.html")
         
