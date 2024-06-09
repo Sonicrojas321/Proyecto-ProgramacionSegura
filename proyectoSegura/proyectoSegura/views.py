@@ -7,7 +7,7 @@ from http.client import HTTPResponse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from db import models
-from proyectoSegura import settings
+from . import settings
 from . import funciones, bot_tele
 
 
@@ -67,16 +67,17 @@ def registrar_alumno(request):
         recaptcha_response = request.POST.get('g-recaptcha-response')  # Obtén el recaptcha response
 
         # Validación del reCAPTCHA
-        data = {
-            'secret': settings.RECAPTCHA_PRIVATE_KEY,
-            'response': recaptcha_response
-        }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = r.json()
-
-        if not result.get('success'):
-            messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-            return render(request, 'registro.html', {'nombreAlumno': nombre, 'apellidosAlumno': apellidos, 'usuarioAlumno': usuario})
+        
+#        data = {
+#            'secret': settings.RECAPTCHA_PRIVATE_KEY,
+#            'response': recaptcha_response
+#        }
+#        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+#        result = r.json()
+#
+#        if not result.get('success'):
+#            messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+#            return render(request, 'registro.html', {'nombreAlumno': nombre, 'apellidosAlumno': apellidos, 'usuarioAlumno': usuario})
 
         # Validación de la contraseña
         if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$', contrasena):
