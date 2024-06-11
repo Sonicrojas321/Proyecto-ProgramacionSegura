@@ -151,3 +151,5 @@ RECAPTCHA_PUBLIC_KEY = '6LcuvvMpAAAAAGvcxN3PHCy_ACBaiiGQ9sBgdliQ'
 
 RECAPTCHA_PRIVATE_KEY = '6LcuvvMpAAAAAGYz7-Qw49SHLOpIUo-fbxMAqaN2'
 # Application definition
+
+CSRF_TRUSTED_ORIGINS = ['https://*.programacion2024brd', 'https://*.127.0.0.1']
