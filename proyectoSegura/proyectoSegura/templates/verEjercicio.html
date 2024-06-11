@@ -8,11 +8,13 @@
 <h2>{{ ejercicio.nombre_ejercicio }}</h2>
 <p>{{ ejercicio.descripcion }}</p>
 
-<form method="post">
+<form method="post" action="/calificando/">
     {% csrf_token %}
     <div class="mb-3">
         <label for="codigo" class="form-label">Subir código:</label>
         <textarea class="form-control" id="codigo" name="codigo" rows="10" required></textarea>
+        <input type="hidden" id="ejercicio_id" name="ejercicio_id" value="{{ ejercicio.id }}">
+        <input type="hidden" id="user_id" name="user_id" value="{{ usuario }}">
     </div>
     <button type="submit" class="btn btn-primary">Enviar Tarea</button>
 </form>

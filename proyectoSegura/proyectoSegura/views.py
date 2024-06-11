@@ -56,6 +56,8 @@ def registrar_alumno(request):
     Returns:
         HttpResponse: _description_
     """
+    if request.method == 'GET':
+        return render(request, "registro.html")
     if request.method == 'POST':
         nombre = request.POST.get('nombreAlumno')
         apellidos = request.POST.get('apellidosAlumno')
@@ -64,7 +66,7 @@ def registrar_alumno(request):
         confirm_contrasena = request.POST.get('contrasenaAlumno1')
         tokenusuario = request.POST.get('token_Usuario')
         botchat = request.POST.get('bot_Usuario')
-        recaptcha_response = request.POST.get('g-recaptcha-response')  # Obtén el recaptcha response
+        #recaptcha_response = request.POST.get('g-recaptcha-response')  # Obtén el recaptcha response
 
         # Validación del reCAPTCHA
         
@@ -125,7 +127,8 @@ def lista_ejercicios(request) -> HttpResponse:
     """
     if request.method in ['GET', 'POST']:
         ejercicios = models.Ejercicio.objects.all()
-        return render(request, "listaejercicios.html", {'ejercicios': ejercicios})
+        id_user = request.session['usuario']
+        return render(request, "listaejercicios.html", {'ejercicios': ejercicios, 'user_id':id_user})
 
 @funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
@@ -166,9 +169,10 @@ def definir_ejercicio(request) -> HttpResponse:
 def ver_ejercicio(request) -> HttpResponse:
     if request.method == 'POST':
         id_ejercicio = request.POST.get('ejercicio_id')
+        user_id = request.POST.get('user_id')
         print(id_ejercicio)
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
-        return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado})
+        return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado, 'usuario':user_id})
 
 @funciones.notoken
 def doble_factor(request) -> HttpResponse:
@@ -204,7 +208,7 @@ def doble_factor(request) -> HttpResponse:
             return redirect('/lista/')
         else:
             print('Bad')
-            messages.error(request,'Try again later')
+            messages.error(request,'Token incorrecto o tiempo de token expirado')
             return redirect('/')
         #return render(request, "dobleFactor.html")
         
@@ -212,9 +216,26 @@ def tarea_revisada(request):
     if request.method == 'GET':
         redirect('/lista/')
     if request.method == 'POST':
-        id_ejercicio = request.POST.get('id_ejercicio')
+        id_ejercicio = request.POST.get('ejercicio_id')
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
         codigo = request.POST.get('codigo')
+        user_id = request.session['usuario']
+        usuario = models.Usuario.objects.get(id=user_id)
+        alumno = models.Alumno.objects.get(usuario = usuario)
+
+        respuesta_alumno = models.Respuesta(
+            respuesta = codigo,
+            calificacion = 0,
+            ejercicio = ejercicio_seleccionado,
+            alumno = alumno
+        )
+        
+        calificacion_ejercicio = funciones.calificar_ejercicio(respuesta_alumno, ejercicio_seleccionado)
+
+        respuesta_alumno.calificacion = calificacion_ejercicio
+        respuesta_alumno.save()
+        redirect('/lista/')
+
         
 
 
