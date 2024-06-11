@@ -2,6 +2,8 @@ import base64
 from datetime import datetime
 from datetime import timezone
 import os
+import docker
+import subprocess
 import crypt
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -154,13 +156,52 @@ def puede_loguearse(request) -> bool:
         return True
 
 def crear_archivo_entrada(ejercicio: object) -> None:
-    entradas = []
-    salidas = []
-    entradas.append(ejercicio.entrada1)
-    entradas.append(ejercicio.entrada2)
-    entradas.append(ejercicio.entrada3)
-    salidas.append(ejercicio.salida1)
-    salidas.append(ejercicio.salida2)
-    salidas.append(ejercicio.salida3)
+    lista_entradas_salidas = []
+    lista_entradas_salidas.append(ejercicio.entrada1)
+    lista_entradas_salidas.append(ejercicio.salida1)
+    lista_entradas_salidas.append(ejercicio.entrada2)
+    lista_entradas_salidas.append(ejercicio.salida2)
+    lista_entradas_salidas.append(ejercicio.entrada3)
+    lista_entradas_salidas.append(ejercicio.salida3)
+
+    with open("./tareas/entrada.txt", "w") as archivo_entrada:
+        contador = 0
+        for cadena in lista_entradas_salidas:
+            archivo_entrada.write(cadena)
+            if contador == 0:
+                archivo_entrada.write("\n!!!!!!\n")
+                contador += 1
+            elif contador == 1:
+                archivo_entrada.write("\n$$$$$$\n")
+                contador == 0
+
+def crear_archivo_alumno(respuesta: object) -> None:
+    with open("./tareas/respuesta.py", "w") as archivo_python:
+        archivo_python.write(respuesta.respuesta)
+    
+
+def calificar_ejercicio(respuesta: object, ejercicio: object) -> int:
+    crear_archivo_entrada(ejercicio)
+    crear_archivo_alumno(respuesta)
+    
+    #Levantar la imagen de docker
+    imagen = "tareas_segura2024"
+    cliente = docker.from_env()
+    contenedor = cliente.containers.run(imagen, remove=True, detach=True)
+
+    contenedor.wait()
+
+    logs = contenedor.logs()
+    return obtener_calificacion(logs)
+
+def obtener_calificacion(resultado:str) -> int:
+    resultados_limpia = resultado[1:-1]
+
+    resultados = resultados_limpia.split(",")
+
+    for i in range(len(resultados)):
+        resultados[i] = resultados[i].lstrip()
+
+    return resultados.count('True')
 
     

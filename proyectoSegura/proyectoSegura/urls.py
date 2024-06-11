@@ -28,5 +28,6 @@ urlpatterns = [
     path('doblefactor/', views.doble_factor),
     path("logout/", views.logout),
     path('captcha/', include('captcha.urls')),
+    path("calificando/", views.tarea_revisada),
     #path('login/', views.login),
 ]

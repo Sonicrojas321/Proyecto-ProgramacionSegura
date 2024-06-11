@@ -28,6 +28,7 @@
                 <tr>
                     <td>
                         <input type="radio" name="ejercicio_id" value="{{ ejercicio.id }}" required>
+                        <input type="hidden" id="user_id" name="user_id" value="{{ usuario }}">
                     </td>
                     <td>{{ ejercicio.nombre_ejercicio }}</td>
                     <td>{{ ejercicio.descripcion }}</td>

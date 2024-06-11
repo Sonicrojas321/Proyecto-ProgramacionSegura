@@ -27,6 +27,9 @@ SECRET_KEY = os.environ.get('DJANGO_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ["https://programacion2024brd", "https://127.0.0.1", "https://google.com"]
+CSRF_ALLOWED_ORIGINS = ["https://programacion2024brd", "https://127.0.0.1", "https://google.com"]
+CORS_ORIGINS_WHITELIST = ["https://programacion2024brd", "https://127.0.0.1", "https://google.com"]
 
 LIMITE_INTENTOS_LOGIN = 3
 LIMITE_SEGUNDOS_LOGIN = 60
@@ -94,8 +97,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': os.environ.get('DB_HOST', 'bd'),
         'PORT': os.environ.get('DB_PORT')
     }
 }

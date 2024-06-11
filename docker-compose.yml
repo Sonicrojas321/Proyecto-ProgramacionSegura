@@ -5,10 +5,10 @@ services:
       image: mariadb
       restart: always
       environment:
-         MYSQL_USER: ${BD_USER}
-         MYSQL_PASSWORD: ${BD_PASSWORD}
-         MYSQL_DATABASE: ${BD_NAME}
-         MYSQL_ROOT_PASSWORD: ${BD_PASSWORD}
+         MYSQL_USER: ${DB_USER}
+         MYSQL_PASSWORD: ${DB_PASS}
+         MYSQL_DATABASE: ${DB_NAME}
+         MYSQL_ROOT_PASSWORD: ${DB_PASS}
       ports:
          - 3306:3306
       volumes:
@@ -27,11 +27,11 @@ services:
          - bd
       environment:
          DJANGO_KEY: ${DJANGO_KEY}
-         DB_NAME: ${BD_NAME}
-         DB_USER: ${BD_USER}
-         DB_PASSWORD: ${BD_PASSWORD}
-         DB_HOST: ${BD_HOST}
-         DB_PORT: ${BD_PORT}  
+         DB_NAME: ${DB_NAME}
+         DB_USER: ${DB_USER}
+         DB_PASS: ${DB_PASS}
+         DB_HOST: bd
+         DB_PORT: ${DB_PORT}  
       deploy:
          resources:
             limits:
