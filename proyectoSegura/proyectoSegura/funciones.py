@@ -187,7 +187,7 @@ def calificar_ejercicio(respuesta: object, ejercicio: object) -> int:
     #Levantar la imagen de docker
     imagen = "tareas_segura2024"
     cliente = docker.from_env()
-    contenedor = cliente.containers.run(imagen, remove=True, detach=True)
+    contenedor = cliente.containers.run(imagen, remove=True, detach=True, stdout=True, stderr=True)
 
     contenedor.wait()
 
