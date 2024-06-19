@@ -4,6 +4,7 @@ from datetime import timezone
 import os
 import docker
 import subprocess
+import socket
 import crypt
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -173,7 +174,7 @@ def crear_archivo_entrada(ejercicio: object) -> None:
                 contador += 1
             elif contador == 1:
                 archivo_entrada.write("\n$$$$$$\n")
-                contador == 0
+                contador = 0
 
 def crear_archivo_alumno(respuesta: object) -> None:
     with open("./tareas/respuesta.py", "w") as archivo_python:
@@ -184,24 +185,45 @@ def calificar_ejercicio(respuesta: object, ejercicio: object) -> int:
     crear_archivo_entrada(ejercicio)
     crear_archivo_alumno(respuesta)
     
-    #Levantar la imagen de docker
-    imagen = "tareas_segura2024"
-    cliente = docker.from_env()
-    contenedor = cliente.containers.run(imagen, remove=True, detach=True, stdout=True, stderr=True)
+    #Mandar señal a contenedor de tareas
+
+    mandarSignal('tareas_segura', 34343, 'Ejecutar')
+    
+    cliente = docker.from_env() 
+    contenedor = cliente.containers.get('proyecto-programacionsegura-tareas_segura-1')
 
     contenedor.wait()
 
     logs = contenedor.logs()
-    return obtener_calificacion(logs)
+    return obtener_calificacion(logs.decode('utf-8'))
 
 def obtener_calificacion(resultado:str) -> int:
-    resultados_limpia = resultado[1:-1]
+    
+    resultados_logs = resultado.split("\n")
 
-    resultados = resultados_limpia.split(",")
+    ultimo_resultado = resultados_logs[-2] #
 
+    resultados_limpia = ultimo_resultado[1:-1]
+
+    resultados = resultados_limpia.split(",") #
+
+    print(resultados)
     for i in range(len(resultados)):
         resultados[i] = resultados[i].lstrip()
+    print(resultados.count('True'))
 
     return resultados.count('True')
 
-    
+def mandarSignal(hostname, puerto, signal):
+    #Crear socket UDP
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    #Dirección del destino
+    direccion_destino = (hostname, puerto)
+
+    #Enviar la señal
+    mensaje = signal
+    sock.sendto(mensaje.encode(), direccion_destino)
+
+    #Cerrar el socket
+    sock.close()

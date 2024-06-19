@@ -45,6 +45,6 @@ class Ejercicio(models.Model):
 
 class Respuesta(models.Model):
     respuesta = models.TextField(blank=True)
-    calificacion = models.DecimalField(decimal_places=1, max_digits=1)
+    calificacion = models.IntegerField()
     ejercicio = models.ForeignKey(Ejercicio, on_delete=models.DO_NOTHING)
     alumno = models.ForeignKey(Alumno, on_delete=models.DO_NOTHING)

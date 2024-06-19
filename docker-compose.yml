@@ -32,7 +32,10 @@ services:
          DB_USER: ${DB_USER}
          DB_PASS: ${DB_PASS}
          DB_HOST: bd
-         DB_PORT: ${DB_PORT}  
+         DB_PORT: ${DB_PORT}
+      group_add:
+         - docker
+      user: limitado  
       deploy:
          resources:
             limits:
@@ -54,4 +57,15 @@ services:
          resources:
             limits:
                cpus: "3"
+               memory: "1024M"
+   
+   tareas_segura:
+      image: tareas_segura2024
+      restart: always
+      volumes:
+         - ./proyectoSegura/tareas:/tareas
+      deploy:
+         resources:
+            limits:
+               cpus: "2"
                memory: "1024M"
