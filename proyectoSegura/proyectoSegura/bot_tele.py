@@ -8,17 +8,26 @@ from db import models
 URL = 'https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s'
 
 def obtener_bot(user:object) -> tuple:
+    """Rutina para obtener el bot del usuario seleccionado
+
+    Args:
+        user (object): Objeto usuario al que se desea conocer su bot
+
+    Returns:
+        tuple: Datos del bot
+    """
     telegram_bot = models.TelegramBot.objects.get(usuario=user)
     return telegram_bot
 
 def generate_otp() -> str:
+    """Rutina que genera de manera segura contraseñas de un solo uso
 
+    Returns:
+        str: Regresa la contraseña de un solo uso
+    """
     random_bytes = os.urandom(6)
-
     otp = base64.b32encode(random_bytes).decode('utf-8')
-
     otp = otp[:6]
-
     return otp
     
 def enviar_mensaje(mensaje: str, user: object) -> bool:

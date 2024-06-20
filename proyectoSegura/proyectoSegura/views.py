@@ -167,6 +167,14 @@ def definir_ejercicio(request) -> HttpResponse:
 
 @funciones.logueado
 def ver_ejercicio(request) -> HttpResponse:
+    """Vista para visualizar el ejercio selecionado de la lista
+
+    Args:
+        request (_type_): Petición
+
+    Returns:
+        HttpResponse: Plantilla de verEjercicio.html
+    """
     if request.method == 'POST':
         id_ejercicio = request.POST.get('ejercicio_id')
         user_id = request.POST.get('user_id')
@@ -176,6 +184,17 @@ def ver_ejercicio(request) -> HttpResponse:
 
 @funciones.notoken
 def doble_factor(request) -> HttpResponse:
+    """Vista para el ingreso del token doble factor, generando el objeto OTP, guardarlo en la base
+    y al llenar el formulario se compara el token ingresado con el que ingresado en la base de datos,
+    también compara el tiempo de vida del token, si alguno de estos dos falla se redirije al login, si
+    es éxitoso redirije a la lista de tareas. 
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        HttpResponse: _description_
+    """
     if request.method == 'GET':
         usuario_id = request.session["usuario"]
         user = models.Usuario.objects.get(id=usuario_id)
@@ -212,9 +231,18 @@ def doble_factor(request) -> HttpResponse:
             return redirect('/')
         #return render(request, "dobleFactor.html")
         
-def tarea_revisada(request):
+def tarea_revisada(request) -> HttpResponse:
+    """Vista encargada de tomar la respuesta del alumno y realizar el proceso de evaluación
+    para posteriormente guardando en la base de datos
+
+    Args:
+        request (_type_): Petición
+
+    Returns:
+        HttpResponse: Respuesta HTTP
+    """
     if request.method == 'GET':
-        redirect('/lista/')
+        return redirect('/lista/')
     if request.method == 'POST':
         id_ejercicio = request.POST.get('ejercicio_id')
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
@@ -234,7 +262,7 @@ def tarea_revisada(request):
 
         respuesta_alumno.calificacion = calificacion_ejercicio
         respuesta_alumno.save()
-        redirect('/lista/')
+        return redirect('/lista/')
 
         
 

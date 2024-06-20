@@ -13,6 +13,11 @@ from db import models
 from proyectoSegura import settings
 
 def logueado(fun_a_decorar):
+    """Manejo de sesiones, si no existe la sesión 'logueado' se regresa a '/'
+
+    Args:
+        fun_a_decorar (_type_): 
+    """
     def interna(request, *args, **kwars):
         logueado = request.session.get('logueado', False)
         if not logueado:
@@ -21,6 +26,12 @@ def logueado(fun_a_decorar):
     return interna
 
 def notoken(fun_a_decorar):
+    """Manejo de sesiones, si no existe la sesión 'notoken' se regresa a '/lista', es decir que si
+    ya ingresaste token, no puedes regresar a la página de generación e ingreso de Token para 2FA.
+
+    Args:
+        fun_a_decorar (_type_): 
+    """
     def interna(request, *args, **kwars):
         logueado = request.session.get('notoken', False)
         if not logueado:
@@ -40,6 +51,14 @@ def generar_salt() -> str:
     return salt
 
 def crear_password_hasheada(password) -> str:
+    """Rutina que genera el hash de la contraseña dada y regresa el hash de la misma
+
+    Args:
+        password (_type_): Contraseña a hashear
+
+    Returns:
+        str: Contraseña cifrada
+    """
     configuracion = '$6$' + generar_salt()
     hasheo = crypt.crypt(password, configuracion)
     return hasheo
@@ -83,6 +102,12 @@ def obtener_ip_cliente(request) -> str:
     return ip
 
 def actualizar_info_cliente(cliente, intentos=1):
+    """Rutina que actualiza la información del cliente cuando intenta logearse
+
+    Args:
+        cliente (_type_): ---
+        intentos (int, optional): Número de intentos de login. Defaults to 1.
+    """
     fecha = datetime.now(timezone.utc)
     cliente.fecha_ultimo_intento = fecha
     cliente.intentos = intentos
@@ -117,6 +142,17 @@ def registrar_cliente(ip: str) -> None:
     registro.save()
 
 def validar_token(user, tokensito) -> bool:
+    """Rutina que valida si el token es aceptado o no, tomado en cuenta el tiempo de vida del token
+    y si el token coinciden con el que ingreso el usuario, a la vez que se elimina el token de la
+    base de datos
+
+    Args:
+        user (_type_): Usuario que se está logrando
+        tokensito (_type_): Token ingresado por el usuario
+
+    Returns:
+        bool: Regresa si es valido o no 
+    """
     try:
         token = models.UserOTP.objects.get(usuario=user)
         print(esta_en_ventana(token.fecha_ultimo_OTP, settings.LIMITE_SEGUNDOS_TOKEN))
@@ -157,6 +193,12 @@ def puede_loguearse(request) -> bool:
         return True
 
 def crear_archivo_entrada(ejercicio: object) -> None:
+    """Rutina que crea de manera local el archivo de entrada necesario para la evaluación
+    del ejercicio, tomando los datos de la base de datos.
+
+    Args:
+        ejercicio (object): Ejercicio selecionado
+    """
     lista_entradas_salidas = []
     lista_entradas_salidas.append(ejercicio.entrada1)
     lista_entradas_salidas.append(ejercicio.salida1)
@@ -177,11 +219,27 @@ def crear_archivo_entrada(ejercicio: object) -> None:
                 contador = 0
 
 def crear_archivo_alumno(respuesta: object) -> None:
+    """Rutina que crea de manera local el archivo de respuesta del alumno (en python)
+
+    Args:
+        respuesta (object): Respuesta del alumno seleccionada
+    """
     with open("./tareas/respuesta.py", "w") as archivo_python:
         archivo_python.write(respuesta.respuesta)
     
 
 def calificar_ejercicio(respuesta: object, ejercicio: object) -> int:
+    """Rutina que califica el ejercicio y regresa el valor en número de la respuesta,
+    manda una señal a través de un socket UDP al contenedor dedicado para revisión de 
+    código y se obtienen los logs de dicho contenedor.
+
+    Args:
+        respuesta (object): Respuesta de alumno
+        ejercicio (object): Ejercicio seleccionado
+
+    Returns:
+        int: Calificación del ejercicio con la respuesta dada
+    """
     crear_archivo_entrada(ejercicio)
     crear_archivo_alumno(respuesta)
     
@@ -198,6 +256,16 @@ def calificar_ejercicio(respuesta: object, ejercicio: object) -> int:
     return obtener_calificacion(logs.decode('utf-8'))
 
 def obtener_calificacion(resultado:str) -> int:
+    """Rutina encargada de obtener los logs del contenedor de revisión de tareas
+    para contar cuántos casos son True y regresas en número entero la cantidad de
+    True hay. 
+
+    Args:
+        resultado (str): Logs del contenedor
+
+    Returns:
+        int: Número entero con el número de True
+    """
     
     resultados_logs = resultado.split("\n")
 
@@ -214,7 +282,14 @@ def obtener_calificacion(resultado:str) -> int:
 
     return resultados.count('True')
 
-def mandarSignal(hostname, puerto, signal):
+def mandarSignal(hostname:str, puerto:int, signal:str):
+    """Rutina de creación de socket UDP para la comunicación con otros contenedores.
+
+    Args:
+        hostname (str): Nombre de dominio
+        puerto (int): Número de puerto
+        signal (str): Texto, señal que se manda
+    """
     #Crear socket UDP
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
