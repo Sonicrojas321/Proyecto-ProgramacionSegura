@@ -42,9 +42,12 @@ class Ejercicio(models.Model):
     salida1 = models.CharField(max_length=100)
     salida2 = models.CharField(max_length=100)
     salida3 = models.CharField(max_length=100)
+    fecha_inicio = models.DateTimeField(null=True)
+    fecha_cierre = models.DateTimeField(null=True)
 
 class Respuesta(models.Model):
     respuesta = models.TextField(blank=True)
     calificacion = models.IntegerField()
+    hora_entrega = models.DateTimeField(null=True)
     ejercicio = models.ForeignKey(Ejercicio, on_delete=models.DO_NOTHING)
     alumno = models.ForeignKey(Alumno, on_delete=models.DO_NOTHING)
