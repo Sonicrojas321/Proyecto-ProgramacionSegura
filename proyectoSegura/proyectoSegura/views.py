@@ -115,7 +115,7 @@ def registrar_alumno(request):
 
     return render(request, "registro.html", {'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY})
 
-@funciones.logueado
+#@funciones.logueado
 def lista_ejercicios(request) -> HttpResponse:
     """Vista que regresa la página donde se mostrarán el listado de ejercicios
 
@@ -130,7 +130,7 @@ def lista_ejercicios(request) -> HttpResponse:
         id_user = request.session['usuario']
         return render(request, "listaejercicios.html", {'ejercicios': ejercicios, 'user_id':id_user})
 
-@funciones.logueado
+#@funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
     """Vista con formulario para definición de ejercicio de programación
 
@@ -165,7 +165,7 @@ def definir_ejercicio(request) -> HttpResponse:
         return redirect('/lista/')
     return render (request, "subirEjercicioMaestro.html")
 
-@funciones.logueado
+#@funciones.logueado
 def ver_ejercicio(request) -> HttpResponse:
     """Vista para visualizar el ejercio selecionado de la lista
 
@@ -182,7 +182,7 @@ def ver_ejercicio(request) -> HttpResponse:
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado, 'usuario':user_id})
 
-@funciones.notoken
+#@funciones.notoken
 def doble_factor(request) -> HttpResponse:
     """Vista para el ingreso del token doble factor, generando el objeto OTP, guardarlo en la base
     y al llenar el formulario se compara el token ingresado con el que ingresado en la base de datos,
