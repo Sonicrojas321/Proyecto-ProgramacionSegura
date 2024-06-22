@@ -24,6 +24,26 @@
       <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
     </div>
 
+    <div class="mb-3">
+      <label for="fechaInicio" class="form-label">Fecha de inicio:</label>
+      <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="fechaCierre" class="form-label">Fecha de cierre:</label>
+      <input type="date" class="form-control" id="fechaCierre" name="fechaCierre" required>
+    </div>
+    
+    <div class="mb-3">
+      <label for="entradaEjemplo" class="form-label">Entrada de ejemplo:</label>
+      <input type="text" class="form-control" id="entradaEjemplo" name="entradaEjemplo" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="salidaEjemplo" class="form-label">Salida de ejemplo:</label>
+      <input type="text" class="form-control" id="salidaEjemplo" name="salidaEjemplo" required>
+    </div>
+
     <table class="table">
       <caption>Tabla de entradas y salidas</caption>
       <thead>
@@ -59,6 +79,7 @@
         </tr>
       </tbody>
     </table>
+
 
     <button type="submit" class="btn btn-primary" id="definirEjercicio">Definir Ejercicio</button>
   </form>
