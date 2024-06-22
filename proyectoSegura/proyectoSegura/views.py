@@ -264,7 +264,8 @@ def tarea_revisada(request) -> HttpResponse:
         respuesta_alumno.save()
         return redirect('/lista/')
 
-        
+def ListaEjercicioMaestro(request):
+    return render(request, "listaEjercicioMaestro.html")       
 
 
 def logout(request) -> HttpResponse:
