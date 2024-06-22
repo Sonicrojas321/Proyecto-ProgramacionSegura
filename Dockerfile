@@ -29,7 +29,7 @@ RUN mkdir /tareas
 RUN groupadd -g 998 docker
 RUN useradd -u 1001 limitado -ms /bin/bash
 RUN chown limitado:limitado -R /tareas
-RUN chown limitado:limitado -R /code/db/migrations
+#RUN chown limitado:limitado -R /code/db/migrations
 
 RUN usermod -aG docker limitado
 

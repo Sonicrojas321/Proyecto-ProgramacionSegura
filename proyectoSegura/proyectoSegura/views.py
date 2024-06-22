@@ -18,12 +18,6 @@ logging.basicConfig(filename='/code/proyectoSegura/app_segura2024.log',
                     level=logging.DEBUG)
 
 
-logging.basicConfig(filename='/code/proyectoSegura/app_segura2024.log',
-                    filemode='a',
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    datefmt='%d-%b-%y %H:%M:%S',
-                    level=logging.DEBUG)
-
 def login(request) -> HttpResponse:
     """Vista de logeo para usuarios, autentica profesores
     y alumnos en el mismo logeo

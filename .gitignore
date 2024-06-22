@@ -20,13 +20,9 @@ certificados/*.pem
 *.pot
 *.pyc
 *.crt
-<<<<<<< HEAD
-*.pem
-=======
 *.cpt
 *.pem
 *.env
->>>>>>> defed443bf0dda21a6216896ef38d222921bf4bd
 *.csr
 __pycache__/
 db.sqlite3
