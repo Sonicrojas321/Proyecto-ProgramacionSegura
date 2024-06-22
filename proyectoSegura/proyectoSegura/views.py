@@ -18,6 +18,11 @@ logging.basicConfig(filename='/code/proyectoSegura/app_segura2024.log',
                     level=logging.DEBUG)
 
 
+logging.basicConfig(filename='/code/proyectoSegura/app_segura2024.log',
+                    filemode='a',
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    datefmt='%d-%b-%y %H:%M:%S',
+                    level=logging.DEBUG)
 
 def login(request) -> HttpResponse:
     """Vista de logeo para usuarios, autentica profesores
@@ -123,10 +128,12 @@ def registrar_alumno(request):
 
         logging.info(funciones.obtener_ip_cliente(request) + ' ha registrado un alumno')
         messages.success(request, 'Alumno registrado exitosamente.')
+        logging.info('%s ha registrado al usuario %s' % (funciones.obtener_ip_cliente(request), nuevo_usuario.username))
         return redirect('/')
 
     return render(request, "registro.html", {'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY})
 
+#@funciones.logueado
 #@funciones.logueado
 def lista_ejercicios(request) -> HttpResponse:
     """Vista que regresa la página donde se mostrarán el listado de ejercicios
@@ -140,6 +147,8 @@ def lista_ejercicios(request) -> HttpResponse:
     if request.method in ['GET', 'POST']:
         ejercicios = models.Ejercicio.objects.all()
         id_user = request.session['usuario']
+        user = models.Usuario.objects.get(id=id_user)
+        logging.info('%s ha ingresado a la lista de ejercicios' % user.username)
         return render(request, "listaejercicios.html", {'ejercicios': ejercicios, 'user_id':id_user})
 
 #@funciones.logueado
@@ -153,6 +162,9 @@ def definir_ejercicio(request) -> HttpResponse:
         HttpResponse: _description_
     """
     if request.method == 'POST':
+        id_user = request.session['usuario']
+        user = user = models.Usuario.objects.get(id=id_user)
+
         nombre_ejercicio = request.POST.get('nombreEjercicio')
         descripcion_ejercicio = request.POST.get('descripcion')
         entrada1 = request.POST.get('entradaUno')
@@ -179,6 +191,7 @@ def definir_ejercicio(request) -> HttpResponse:
     return render (request, "subirEjercicioMaestro.html")
 
 #@funciones.logueado
+#@funciones.logueado
 def ver_ejercicio(request) -> HttpResponse:
     """Vista para visualizar el ejercio selecionado de la lista
 
@@ -200,6 +213,7 @@ def ver_ejercicio(request) -> HttpResponse:
         logging.info('El alumno %s ha ingresado al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado, 'usuario':user_id})
 
+#@funciones.notoken
 #@funciones.notoken
 def doble_factor(request) -> HttpResponse:
     """Vista para el ingreso del token doble factor, generando el objeto OTP, guardarlo en la base
@@ -283,8 +297,9 @@ def tarea_revisada(request) -> HttpResponse:
         logging.info('El alumno %s ha subido su respuesta al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
         return redirect('/lista/')
 
-        
-
+    
+def ListaEjercicioMaestro(request):
+    return render(request, "listaEjercicioMaestro.html")   
 
 def logout(request) -> HttpResponse:
     """
@@ -294,6 +309,6 @@ def logout(request) -> HttpResponse:
     request -- 
     returns: HttpResponse 
     """
-    logging.info('El usuario %s')
+    logging.info('El usuario cerro sesión')
     request.session.flush()
     return redirect('/')

@@ -7,7 +7,7 @@ proyectoSegura/proyectoSegura/__pycache__/*
 proyectoSegura/proyectoSegura/__pycache__/settings.cpython-39.pyc
 proyectoSegura/proyectoSegura/__pycache__/urls.cpython-39.pyc
 proyectoSegura/proyectoSegura/__pycache__/views.cpython-39.pyc
-proyectoSegura/secrets.env.cpt
+secrets.env.cpt
 data/*
 data/sys/*
 data/mysql*
@@ -20,7 +20,13 @@ certificados/*.pem
 *.pot
 *.pyc
 *.crt
+<<<<<<< HEAD
 *.pem
+=======
+*.cpt
+*.pem
+*.env
+>>>>>>> defed443bf0dda21a6216896ef38d222921bf4bd
 *.csr
 __pycache__/
 db.sqlite3
