@@ -36,14 +36,15 @@ class Ejercicio(models.Model):
     nombre_ejercicio = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=500)
     valor = models.IntegerField()
+    fecha_inicio = models.DateTimeField(null=True)
+    fecha_cierre = models.DateTimeField(null=True)
     entrada1 = models.CharField(max_length=100)
     entrada2 = models.CharField(max_length=100)
     entrada3 = models.CharField(max_length=100)
     salida1 = models.CharField(max_length=100)
     salida2 = models.CharField(max_length=100)
     salida3 = models.CharField(max_length=100)
-    fecha_inicio = models.DateTimeField(null=True)
-    fecha_cierre = models.DateTimeField(null=True)
+
 
 class Respuesta(models.Model):
     respuesta = models.TextField(blank=True)
