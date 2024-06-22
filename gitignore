@@ -1,32 +1,42 @@
+<<<<<<< HEAD
+proyectoSegura/proyectoSegura/settings.py
+proyectoSegura/db.sqlite3
+proyectoSegura/db/migrations/*
+proyectoSegura/db/__pycache__/*
+=======
 proyectoSegura/db.sqlite3
 proyectoSegura/db/migrations/*
 proyectoSegura/db/__pycache__/*.pyc
+>>>>>>> defed443bf0dda21a6216896ef38d222921bf4bd
 proyectoSegura/db/__pycache__/__init__.cpython-39.pyc
 proyectoSegura/db/__pycache__/models.cpython-39.pyc
 proyectoSegura/proyectoSegura/__pycache__/*
 proyectoSegura/proyectoSegura/__pycache__/settings.cpython-39.pyc
 proyectoSegura/proyectoSegura/__pycache__/urls.cpython-39.pyc
 proyectoSegura/proyectoSegura/__pycache__/views.cpython-39.pyc
-secrets.env.cpt
+proyectoSegura/secrets.env.cpt
 data/*
 data/sys/*
 data/mysql*
 data/performance_schema/*
 certificados/*
+<<<<<<< HEAD
+=======
 certificados/*.csr
 certificados/*.crt
 certificados/*.pem
+>>>>>>> defed443bf0dda21a6216896ef38d222921bf4bd
 *.log
 *.pot
 *.pyc
 *.crt
-<<<<<<< HEAD
 *.pem
-=======
-*.cpt
-*.pem
-*.env
->>>>>>> defed443bf0dda21a6216896ef38d222921bf4bd
 *.csr
 __pycache__/
+<<<<<<< HEAD
+.env
 db.sqlite3
+.cpt
+=======
+db.sqlite3
+>>>>>>> defed443bf0dda21a6216896ef38d222921bf4bd

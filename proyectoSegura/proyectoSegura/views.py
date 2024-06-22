@@ -9,7 +9,20 @@ from django.http import HttpResponse, JsonResponse
 from db import models
 from . import settings
 from . import funciones, bot_tele
+import logging
 
+logging.basicConfig(filename='/code/proyectoSegura/app_segura2024.log',
+                    filemode='a',
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    datefmt='%d-%b-%y %H:%M:%S',
+                    level=logging.DEBUG)
+
+
+logging.basicConfig(filename='/code/proyectoSegura/app_segura2024.log',
+                    filemode='a',
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    datefmt='%d-%b-%y %H:%M:%S',
+                    level=logging.DEBUG)
 
 def login(request) -> HttpResponse:
     """Vista de logeo para usuarios, autentica profesores
@@ -36,14 +49,16 @@ def login(request) -> HttpResponse:
                 #Usuario autenticado
                 request.session['usuario'] = user.id
                 request.session["notoken"] = True
-                print('logeado')
+                logging.info(funciones.obtener_ip_cliente(request) + ' ha ingresado credenciales correctamente')
                 return redirect('/doblefactor/')
             else:
                 error = 'Credenciales inválidas'
+                logging.error(funciones.obtener_ip_cliente(request) + ' falló autenticación')
                 return render(request, 'login.html', {'errores': error})
 
         except models.Usuario.DoesNotExist:
             error = 'Credenciales inválidas'
+            logging.error(funciones.obtener_ip_cliente(request) + ' falló autenticación')
             return render(request, 'login.html', {'errores': error})
 
 
@@ -57,6 +72,7 @@ def registrar_alumno(request):
         HttpResponse: _description_
     """
     if request.method == 'GET':
+        logging.info(funciones.obtener_ip_cliente(request) + ' ha ingresado a Registro de alumno')
         return render(request, "registro.html")
     if request.method == 'POST':
         nombre = request.POST.get('nombreAlumno')
@@ -110,12 +126,15 @@ def registrar_alumno(request):
         nuevo_usuario.save()
         nuevo_alumno.save()
 
+        logging.info(funciones.obtener_ip_cliente(request) + ' ha registrado un alumno')
         messages.success(request, 'Alumno registrado exitosamente.')
+        logging.info('%s ha registrado al usuario %s' % (funciones.obtener_ip_cliente(request), nuevo_usuario.username))
         return redirect('/')
 
     return render(request, "registro.html", {'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY})
 
-@funciones.logueado
+#@funciones.logueado
+#@funciones.logueado
 def lista_ejercicios(request) -> HttpResponse:
     """Vista que regresa la página donde se mostrarán el listado de ejercicios
 
@@ -128,9 +147,11 @@ def lista_ejercicios(request) -> HttpResponse:
     if request.method in ['GET', 'POST']:
         ejercicios = models.Ejercicio.objects.all()
         id_user = request.session['usuario']
+        user = models.Usuario.objects.get(id=id_user)
+        logging.info('%s ha ingresado a la lista de ejercicios' % user.username)
         return render(request, "listaejercicios.html", {'ejercicios': ejercicios, 'user_id':id_user})
 
-@funciones.logueado
+#@funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
     """Vista con formulario para definición de ejercicio de programación
 
@@ -141,6 +162,9 @@ def definir_ejercicio(request) -> HttpResponse:
         HttpResponse: _description_
     """
     if request.method == 'POST':
+        id_user = request.session['usuario']
+        user = user = models.Usuario.objects.get(id=id_user)
+
         nombre_ejercicio = request.POST.get('nombreEjercicio')
         descripcion_ejercicio = request.POST.get('descripcion')
         entrada1 = request.POST.get('entradaUno')
@@ -162,20 +186,47 @@ def definir_ejercicio(request) -> HttpResponse:
             salida3 = salida3
         )
         ejercicio_nuevo.save()
+        logging.info('El profesor ha ingresado creado nueva tarea')
         return redirect('/lista/')
     return render (request, "subirEjercicioMaestro.html")
 
-@funciones.logueado
+#@funciones.logueado
+#@funciones.logueado
 def ver_ejercicio(request) -> HttpResponse:
+    """Vista para visualizar el ejercio selecionado de la lista
+
+    Args:
+        request (_type_): Petición
+
+    Returns:
+        HttpResponse: Plantilla de verEjercicio.html
+    """
     if request.method == 'POST':
         id_ejercicio = request.POST.get('ejercicio_id')
         user_id = request.POST.get('user_id')
-        print(id_ejercicio)
+        
+        usuario_id = request.session["usuario"]
+        user = models.Usuario.objects.get(id=usuario_id)
+
+        alumno = models.Alumno.objects.get(usuario = user)
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
+        logging.info('El alumno %s ha ingresado al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado, 'usuario':user_id})
 
-@funciones.notoken
+#@funciones.notoken
+#@funciones.notoken
 def doble_factor(request) -> HttpResponse:
+    """Vista para el ingreso del token doble factor, generando el objeto OTP, guardarlo en la base
+    y al llenar el formulario se compara el token ingresado con el que ingresado en la base de datos,
+    también compara el tiempo de vida del token, si alguno de estos dos falla se redirije al login, si
+    es éxitoso redirije a la lista de tareas. 
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        HttpResponse: _description_
+    """
     if request.method == 'GET':
         usuario_id = request.session["usuario"]
         user = models.Usuario.objects.get(id=usuario_id)
@@ -186,7 +237,7 @@ def doble_factor(request) -> HttpResponse:
         new_otp = models.UserOTP(ultimo_OTP=otp, fecha_ultimo_OTP=actual, usuario=user)
         new_otp.save()
         bot_tele.enviar_mensaje(otp, user) 
-        print(otp)
+        logging.info('Se ha mandado token al bot de telegram')
         return render(request, "dobleFactor.html")
     if request.method == 'POST':
         usuario_id = request.session["usuario"]
@@ -202,19 +253,28 @@ def doble_factor(request) -> HttpResponse:
         print(user.username)
         print(intento_otp)
         if funciones.validar_token(user, intento_otp):
-            print('Good')
+            logging.info('%s se ha logeado éxitosamente con el usuario %s' % (funciones.obtener_ip_cliente(request), user.username))
             request.session["logueado"] = True
             request.session["notoken"] = False
             return redirect('/lista/')
         else:
-            print('Bad')
+            logging.error('%s ha ingresado incorrectamente el token para el usuario %s' % (funciones.obtener_ip_cliente(request), user.username))
             messages.error(request,'Token incorrecto o tiempo de token expirado')
             return redirect('/')
         #return render(request, "dobleFactor.html")
         
-def tarea_revisada(request):
+def tarea_revisada(request) -> HttpResponse:
+    """Vista encargada de tomar la respuesta del alumno y realizar el proceso de evaluación
+    para posteriormente guardando en la base de datos
+
+    Args:
+        request (_type_): Petición
+
+    Returns:
+        HttpResponse: Respuesta HTTP
+    """
     if request.method == 'GET':
-        redirect('/lista/')
+        return redirect('/lista/')
     if request.method == 'POST':
         id_ejercicio = request.POST.get('ejercicio_id')
         ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
@@ -234,10 +294,12 @@ def tarea_revisada(request):
 
         respuesta_alumno.calificacion = calificacion_ejercicio
         respuesta_alumno.save()
-        redirect('/lista/')
+        logging.info('El alumno %s ha subido su respuesta al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
+        return redirect('/lista/')
 
-        
-
+    
+def ListaEjercicioMaestro(request):
+    return render(request, "listaEjercicioMaestro.html")   
 
 def logout(request) -> HttpResponse:
     """
@@ -247,5 +309,6 @@ def logout(request) -> HttpResponse:
     request -- 
     returns: HttpResponse 
     """
+    logging.info('El usuario cerro sesión')
     request.session.flush()
     return redirect('/')

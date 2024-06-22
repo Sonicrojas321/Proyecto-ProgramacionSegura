@@ -1,0 +1,51 @@
+{% extends "baseMaestro.html" %}
+
+{% load static %}
+{% block scripts %}
+<script src="/static/js/seleccionarEjercicio.js"></script>
+{% endblock %}
+
+{% block titulo %}Lista de Ejercicios{% endblock %}
+{% block encabezado %}Lista de Ejercicios{% endblock %}
+{% block contenido %}
+
+<div class="table-responsive">
+    <h5>EJERCICIOS:</h5>
+
+    <form method="post" action="/verEjercicio/">
+        {% csrf_token %}
+        <table class="table table-bordered table-striped">
+            <caption>Tabla de ejercicios</caption>
+            <thead>
+                <tr>
+                    <th>Seleccionar</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ejercicio in ejercicios %}
+                <tr>
+                    <td>
+                        <input type="radio" name="ejercicio_id" value="{{ ejercicio.id }}" required>
+                        <input type="hidden" id="user_id" name="user_id" value="{{ usuario }}">
+                    </td>
+                    <td>{{ ejercicio.nombre_ejercicio }}</td>
+                    <td>{{ ejercicio.descripcion }}</td>
+                    <td>
+                        <form method="post" action="/eliminarEjercicio/">
+                            {% csrf_token %}
+                            <input type="hidden" name="ejercicio_id" value="{{ ejercicio.id }}">
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary" id="seleccionar_ejercicio">Ver Ejercicio</button>
+    </form>
+</div>
+
+{% endblock %}

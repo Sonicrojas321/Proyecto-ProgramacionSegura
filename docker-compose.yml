@@ -16,13 +16,14 @@ services:
       deploy:
          resources:
             limits:
-               cpus: "3"
+               cpus: "1"
                memory: "1024M"                          
 
    app:
       image: app_segura2024
       volumes:
          - ./proyectoSegura:/code
+         - /var/run/docker.sock:/var/run/docker.sock
       depends_on:
          - bd
       environment:
@@ -31,18 +32,21 @@ services:
          DB_USER: ${DB_USER}
          DB_PASS: ${DB_PASS}
          DB_HOST: bd
-         DB_PORT: ${DB_PORT}  
+         DB_PORT: ${DB_PORT}
+      group_add:
+         - docker
+      user: limitado  
       deploy:
          resources:
             limits:
-               cpus: "3"
+               cpus: "1"
                memory: "1024M"                 
 
    nginx:
       image: nginx
       restart: always
       ports:
-         - 80:80
+         - 8080:80
          - 443:443
       volumes:
          - ./nginx:/etc/nginx/conf.d
@@ -52,5 +56,16 @@ services:
       deploy:
          resources:
             limits:
-               cpus: "3"
+               cpus: "1"
+               memory: "1024M"
+   
+   tareas_segura:
+      image: tareas_segura2024
+      restart: always
+      volumes:
+         - ./proyectoSegura/tareas:/tareas
+      deploy:
+         resources:
+            limits:
+               cpus: "1"
                memory: "1024M"

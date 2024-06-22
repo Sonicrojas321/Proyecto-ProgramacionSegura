@@ -29,5 +29,10 @@ urlpatterns = [
     path("logout/", views.logout),
     path('captcha/', include('captcha.urls')),
     path("calificando/", views.tarea_revisada),
+<<<<<<< HEAD
+    #path("verEjericioMaestro/", views.verEjericio_Maestro),
+=======
+    path("verListaMaestro/", views.ListaEjercicioMaestro),
+>>>>>>> defed443bf0dda21a6216896ef38d222921bf4bd
     #path('login/', views.login),
 ]
