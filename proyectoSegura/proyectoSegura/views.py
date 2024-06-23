@@ -143,7 +143,7 @@ def lista_ejercicios(request) -> HttpResponse:
         id_user = request.session['usuario']
         user = models.Usuario.objects.get(id=id_user)
         logging.info('%s ha ingresado a la lista de ejercicios' % user.username)
-        return render(request, "listaejercicios.html", {'ejercicios': ejercicios, 'user_id':id_user})
+        return render(request, "listaejercicios.html", {'ejercicios': ejercicios})
 
 #@funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
@@ -167,6 +167,8 @@ def definir_ejercicio(request) -> HttpResponse:
         salida1 = request.POST.get('salidaUno')
         salida2 = request.POST.get('salidaDos')
         salida3 = request.POST.get('salidaTres')
+        fecha_inicio = request.POST.get('fechaInicio')
+        fecha_cierre = request.POST.get('fechaCierre')
 
         ejercicio_nuevo = models.Ejercicio(
             nombre_ejercicio = nombre_ejercicio,
@@ -177,7 +179,9 @@ def definir_ejercicio(request) -> HttpResponse:
             entrada3 = entrada3,
             salida1 = salida1,
             salida2 = salida2,
-            salida3 = salida3
+            salida3 = salida3,
+            fecha_inicio = fecha_inicio,
+            fecha_cierre = fecha_cierre
         )
         ejercicio_nuevo.save()
         logging.info('El profesor ha ingresado creado nueva tarea')
@@ -287,6 +291,7 @@ def tarea_revisada(request) -> HttpResponse:
         calificacion_ejercicio = funciones.calificar_ejercicio(respuesta_alumno, ejercicio_seleccionado)
 
         respuesta_alumno.calificacion = calificacion_ejercicio
+        respuesta_alumno.hora_entrega = datetime.now(timezone.utc)
         respuesta_alumno.save()
         logging.info('El alumno %s ha subido su respuesta al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
         return redirect('/lista/')

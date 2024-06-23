@@ -5,6 +5,8 @@
 <script src="/static/js/seleccionarEjercicio.js"></script>
 {% endblock %}
 
+{% load custom_filters %}
+
 {% block titulo %}Lista de Ejercicios{% endblock %}
 {% block encabezado %}Lista de Ejercicios{% endblock %}
 {% block contenido %}
@@ -27,8 +29,13 @@
                 {% for ejercicio in ejercicios %}
                 <tr>
                     <td>
+                        {% if not ejercicio.fecha_cierre|is_past_due %}
                         <input type="radio" name="ejercicio_id" value="{{ ejercicio.id }}" required>
                         <input type="hidden" id="user_id" name="user_id" value="{{ usuario }}">
+                        {% else %}
+                        <input type="radio" name="ejercicio_id" value="{{ ejercicio.id }}" disabled>
+                        <input type="hidden" id="user_id" name="user_id" value="{{ usuario }}">
+                        {% endif %}
                     </td>
                     <td>{{ ejercicio.nombre_ejercicio }}</td>
                     <td>{{ ejercicio.descripcion }}</td>
