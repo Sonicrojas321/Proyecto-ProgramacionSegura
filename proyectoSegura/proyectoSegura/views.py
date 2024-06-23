@@ -297,10 +297,16 @@ def ListaEjercicioMaestro(request):
     return render(request, "listaEjercicioMaestro.html", {'ejercicios':ejercicios})   
 
 def tablaEjercicioM(request):
-    return render(request,"tablaEjercicioMaestro.html")
+    ejercicios = models.Ejercicio.objects.all()
+    ejercicios_con_respuesta = []
+    for ejercicio in ejercicios:
+        respuestas = models.Respuesta.objects.filter(ejercicio=ejercicio)
+        ejercicios_con_respuesta.append((ejercicio, respuestas))
+    return render(request,"tablaEjercicioMaestro.html", {'ejercicios_con_respuestas': ejercicios_con_respuesta})
 
 def detalleRespuestaMaestro(request):
-    return render(request,"detalleMaestro.html")
+    respuesta = models.Respuesta.objects.get(id=27)
+    return render(request,"detalleMaestro.html", {'respuesta':respuesta})
 
 def logout(request) -> HttpResponse:
     """
