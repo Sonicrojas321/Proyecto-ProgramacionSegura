@@ -144,12 +144,15 @@ def lista_ejercicios(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    if request.method in ['GET', 'POST']:
-        ejercicios = models.Ejercicio.objects.all()
-        id_user = request.session['usuario']
-        user = models.Usuario.objects.get(id=id_user)
-        logging.info('%s ha ingresado a la lista de ejercicios' % user.username)
-        return render(request, "listaejercicios.html", {'ejercicios': ejercicios})
+    if request.session['user_type'] == 'alumno':
+        if request.method in ['GET', 'POST']:
+            ejercicios = models.Ejercicio.objects.all()
+            id_user = request.session['usuario']
+            user = models.Usuario.objects.get(id=id_user)
+            logging.info('%s ha ingresado a la lista de ejercicios' % user.username)
+            return render(request, "listaejercicios.html", {'ejercicios': ejercicios})
+    else:
+        return redirect('/verlistaMaestro/')
 
 @funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
@@ -161,36 +164,41 @@ def definir_ejercicio(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    if request.method == 'POST':
+    if request.session['user_type'] == 'maestro':
+        if request.method == 'POST':
+            id_user = request.session['usuario']
+            user = models.Usuario.objects.get(id=id_user)
 
-        nombre_ejercicio = request.POST.get('nombreEjercicio')
-        descripcion_ejercicio = request.POST.get('descripcion')
-        entrada1 = request.POST.get('entradaUno')
-        entrada2 = request.POST.get('entradaDos')
-        entrada3 = request.POST.get('entradaTres')
-        salida1 = request.POST.get('salidaUno')
-        salida2 = request.POST.get('salidaDos')
-        salida3 = request.POST.get('salidaTres')
-        fecha_inicio = request.POST.get('fechaInicio')
-        fecha_cierre = request.POST.get('fechaCierre')
-
-        ejercicio_nuevo = models.Ejercicio(
-            nombre_ejercicio = nombre_ejercicio,
-            descripcion = descripcion_ejercicio,
-            valor = 3,
-            entrada1 = entrada1,
-            entrada2 = entrada2,
-            entrada3 = entrada3,
-            salida1 = salida1,
-            salida2 = salida2,
-            salida3 = salida3,
-            fecha_inicio = fecha_inicio,
-            fecha_cierre = fecha_cierre
-        )
-        ejercicio_nuevo.save()
-        logging.info('El profesor ha ingresado creado nueva tarea')
-        return redirect('/verListaMaestro/')
-    return render (request, "subirEjercicioMaestro.html")
+            nombre_ejercicio = request.POST.get('nombreEjercicio')
+            descripcion_ejercicio = request.POST.get('descripcion')
+            entrada1 = request.POST.get('entradaUno')
+            entrada2 = request.POST.get('entradaDos')
+            entrada3 = request.POST.get('entradaTres')
+            salida1 = request.POST.get('salidaUno')
+            salida2 = request.POST.get('salidaDos')
+            salida3 = request.POST.get('salidaTres')
+            fecha_inicio = request.POST.get('fechaInicio')
+            fecha_cierre = request.POST.get('fechaCierre')
+    
+            ejercicio_nuevo = models.Ejercicio(
+                nombre_ejercicio = nombre_ejercicio,
+                descripcion = descripcion_ejercicio,
+                valor = 3,
+                entrada1 = entrada1,
+                entrada2 = entrada2,
+                entrada3 = entrada3,
+                salida1 = salida1,
+                salida2 = salida2,
+                salida3 = salida3,
+                fecha_inicio = fecha_inicio,
+                fecha_cierre = fecha_cierre
+            )
+            ejercicio_nuevo.save()
+            logging.info('El profesor ha ingresado creado nueva tarea')
+            return redirect('/verListaMaestro/')
+        return render (request, "subirEjercicioMaestro.html")
+    else:
+        return redirect('/lista/')
 
 
 @funciones.logueado
@@ -203,18 +211,20 @@ def ver_ejercicio(request) -> HttpResponse:
     Returns:
         HttpResponse: Plantilla de verEjercicio.html
     """
-    if request.method == 'POST':
-        id_ejercicio = request.POST.get('ejercicio_id')
-        user_id = request.POST.get('user_id')
-        
-        usuario_id = request.session["usuario"]
-        user = models.Usuario.objects.get(id=usuario_id)
+    if request.session['user_type'] == 'alumno':
+        if request.method == 'POST':
+            id_ejercicio = request.POST.get('ejercicio_id')
+            user_id = request.POST.get('user_id')
 
-        alumno = models.Alumno.objects.get(usuario = user)
-        ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
-        logging.info('El alumno %s ha ingresado al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
-        return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado, 'usuario':user_id})
+            usuario_id = request.session["usuario"]
+            user = models.Usuario.objects.get(id=usuario_id)
 
+            alumno = models.Alumno.objects.get(usuario = user)
+            ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
+            logging.info('El alumno %s ha ingresado al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
+            return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado, 'usuario':user_id})
+    else:
+        return redirect('/verlistaMaestro/')
 
 @funciones.notoken
 def doble_factor(request) -> HttpResponse:
@@ -280,49 +290,61 @@ def tarea_revisada(request) -> HttpResponse:
     Returns:
         HttpResponse: Respuesta HTTP
     """
-    if request.method == 'GET':
+    if request.session['user_type'] == 'alumno':
+        if request.method == 'GET':
+            return redirect('/lista/')
+        if request.method == 'POST':
+            id_ejercicio = request.POST.get('ejercicio_id')
+            ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
+            codigo = request.POST.get('codigo')
+            user_id = request.session['usuario']
+            usuario = models.Usuario.objects.get(id=user_id)
+            alumno = models.Alumno.objects.get(usuario = usuario)
+
+            respuesta_alumno = models.Respuesta(
+                respuesta = codigo,
+                calificacion = 0,
+                ejercicio = ejercicio_seleccionado,
+                alumno = alumno
+            )
+
+            calificacion_ejercicio = funciones.calificar_ejercicio(respuesta_alumno, ejercicio_seleccionado)
+
+            respuesta_alumno.calificacion = calificacion_ejercicio
+            respuesta_alumno.hora_entrega = datetime.now(timezone.utc)
+            respuesta_alumno.save()
+            logging.info('El alumno %s ha subido su respuesta al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
+            return redirect('/lista/')
+    else:
+        return redirect('/verListaMaestro/')
+
+@funciones.logueado
+def ListaEjercicioMaestro(request):
+    if request.session['user_type'] == 'maestro':
+        ejercicios = models.Ejercicio.objects.all()
+        return render(request, "listaEjercicioMaestro.html", {'ejercicios':ejercicios})
+    else:
         return redirect('/lista/')
-    if request.method == 'POST':
-        id_ejercicio = request.POST.get('ejercicio_id')
-        ejercicio_seleccionado = models.Ejercicio.objects.get(id=id_ejercicio)
-        codigo = request.POST.get('codigo')
-        user_id = request.session['usuario']
-        usuario = models.Usuario.objects.get(id=user_id)
-        alumno = models.Alumno.objects.get(usuario = usuario)
 
-        respuesta_alumno = models.Respuesta(
-            respuesta = codigo,
-            calificacion = 0,
-            ejercicio = ejercicio_seleccionado,
-            alumno = alumno
-        )
-        
-        calificacion_ejercicio = funciones.calificar_ejercicio(respuesta_alumno, ejercicio_seleccionado)
-
-        respuesta_alumno.calificacion = calificacion_ejercicio
-        respuesta_alumno.hora_entrega = datetime.now(timezone.utc)
-        respuesta_alumno.save()
-        logging.info('El alumno %s ha subido su respuesta al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
+@funciones.logueado
+def tablaEjercicioM(request):
+    if request.session['user_type'] == 'maestro':
+        ejercicios = models.Ejercicio.objects.all()
+        ejercicios_con_respuesta = []
+        for ejercicio in ejercicios:
+            respuestas = models.Respuesta.objects.filter(ejercicio=ejercicio)
+            ejercicios_con_respuesta.append((ejercicio, respuestas))
+        return render(request,"tablaEjercicioMaestro.html", {'ejercicios_con_respuestas': ejercicios_con_respuesta})
+    else:
         return redirect('/lista/')
 
 @funciones.logueado
-def lista_ejercicio_maestro(request):
-    ejercicios = models.Ejercicio.objects.all()
-    return render(request, "listaEjercicioMaestro.html", {'ejercicios':ejercicios})   
-
-@funciones.logueado
-def tabla_ejerciciom(request):
-    ejercicios = models.Ejercicio.objects.all()
-    ejercicios_con_respuesta = []
-    for ejercicio in ejercicios:
-        respuestas = models.Respuesta.objects.filter(ejercicio=ejercicio)
-        ejercicios_con_respuesta.append((ejercicio, respuestas))
-    return render(request,"tablaEjercicioMaestro.html", {'ejercicios_con_respuestas': ejercicios_con_respuesta})
-
-@funciones.logueado
-def detalle_respuesta_maestro(request):
-    respuesta = models.Respuesta.objects.get(id=27)
-    return render(request,"detalleMaestro.html", {'respuesta':respuesta})
+def detalleRespuestaMaestro(request):
+    if request.session['user_type'] == 'maestro':
+        respuesta = models.Respuesta.objects.get(id=27)
+        return render(request,"detalleMaestro.html", {'respuesta':respuesta})
+    else:
+        return redirect('/lista/')
 
 def logout(request) -> HttpResponse:
     """
