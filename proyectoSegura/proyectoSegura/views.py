@@ -136,8 +136,7 @@ def registrar_alumno(request):
 
     return render(request, "registro.html", {'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY})
 
-#@funciones.logueado
-#@funciones.logueado
+@funciones.logueado
 def lista_ejercicios(request) -> HttpResponse:
     """Vista que regresa la página donde se mostrarán el listado de ejercicios
 
@@ -154,7 +153,7 @@ def lista_ejercicios(request) -> HttpResponse:
         logging.info('%s ha ingresado a la lista de ejercicios' % user.username)
         return render(request, "listaejercicios.html", {'ejercicios': ejercicios})
 
-#@funciones.logueado
+@funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
     """Vista con formulario para definición de ejercicio de programación
 
@@ -197,8 +196,8 @@ def definir_ejercicio(request) -> HttpResponse:
         return redirect('/verListaMaestro/')
     return render (request, "subirEjercicioMaestro.html")
 
-#@funciones.logueado
-#@funciones.logueado
+
+@funciones.logueado
 def ver_ejercicio(request) -> HttpResponse:
     """Vista para visualizar el ejercio selecionado de la lista
 
@@ -220,8 +219,8 @@ def ver_ejercicio(request) -> HttpResponse:
         logging.info('El alumno %s ha ingresado al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
         return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado, 'usuario':user_id})
 
-#@funciones.notoken
-#@funciones.notoken
+
+@funciones.notoken
 def doble_factor(request) -> HttpResponse:
     """Vista para el ingreso del token doble factor, generando el objeto OTP, guardarlo en la base
     y al llenar el formulario se compara el token ingresado con el que ingresado en la base de datos,
@@ -275,6 +274,7 @@ def doble_factor(request) -> HttpResponse:
             return redirect('/')
         #return render(request, "dobleFactor.html")
         
+@funciones.logueado
 def tarea_revisada(request) -> HttpResponse:
     """Vista encargada de tomar la respuesta del alumno y realizar el proceso de evaluación
     para posteriormente guardando en la base de datos
@@ -310,11 +310,12 @@ def tarea_revisada(request) -> HttpResponse:
         logging.info('El alumno %s ha subido su respuesta al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
         return redirect('/lista/')
 
-    
+@funciones.logueado
 def ListaEjercicioMaestro(request):
     ejercicios = models.Ejercicio.objects.all()
     return render(request, "listaEjercicioMaestro.html", {'ejercicios':ejercicios})   
 
+@funciones.logueado
 def tablaEjercicioM(request):
     ejercicios = models.Ejercicio.objects.all()
     ejercicios_con_respuesta = []
@@ -323,6 +324,7 @@ def tablaEjercicioM(request):
         ejercicios_con_respuesta.append((ejercicio, respuestas))
     return render(request,"tablaEjercicioMaestro.html", {'ejercicios_con_respuestas': ejercicios_con_respuesta})
 
+@funciones.logueado
 def detalleRespuestaMaestro(request):
     respuesta = models.Respuesta.objects.get(id=27)
     return render(request,"detalleMaestro.html", {'respuesta':respuesta})
