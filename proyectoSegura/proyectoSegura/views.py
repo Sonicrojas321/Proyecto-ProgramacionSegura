@@ -296,6 +296,9 @@ def ListaEjercicioMaestro(request):
     ejercicios = models.Ejercicio.objects.all()
     return render(request, "listaEjercicioMaestro.html", {'ejercicios':ejercicios})   
 
+def tablaEjercicioM(request):
+    return render(request,"tablaEjercicioMaestro.html")
+
 def logout(request) -> HttpResponse:
     """
     Función básica de logout.

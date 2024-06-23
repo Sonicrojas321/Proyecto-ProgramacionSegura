@@ -1,0 +1,36 @@
+{% extends "baseMaestro.html" %}
+
+{% block titulo %}Puntajes de Ejercicios{% endblock %}
+{% block encabezado %}Puntajes de Ejercicios{% endblock %}
+{% block contenido %}
+
+<div class="table-responsive">
+    <h5>PUNTAJES POR EJERCICIO:</h5>
+
+    {% for ejercicio, respuestas in puntajes.items %}
+    <h6>{{ ejercicio.nombre_ejercicio }}: {{ ejercicio.descripcion }}</h6>
+    <table class="table table-bordered table-striped">
+        <caption>Puntajes de {{ ejercicio.nombre_ejercicio }}</caption>
+        <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Apellido</th>
+                <th>Puntaje</th>
+                <th>Hora de Entrega</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for respuesta in respuestas %}
+            <tr>
+                <td>{{ respuesta.alumno.nombre }}</td>
+                <td>{{ respuesta.alumno.apellido }}</td>
+                <td>{{ respuesta.calificacion }}</td>
+                <td>{{ respuesta.hora_entrega }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+
+{% endblock %}
