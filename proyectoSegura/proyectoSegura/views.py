@@ -293,7 +293,8 @@ def tarea_revisada(request) -> HttpResponse:
 
     
 def ListaEjercicioMaestro(request):
-    return render(request, "listaEjercicioMaestro.html")   
+    ejercicios = models.Ejercicio.objects.all()
+    return render(request, "listaEjercicioMaestro.html", {'ejercicios':ejercicios})   
 
 def logout(request) -> HttpResponse:
     """
