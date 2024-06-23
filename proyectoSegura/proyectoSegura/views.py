@@ -14,8 +14,7 @@ import logging
 logging.basicConfig(filename='/code/proyectoSegura/app_segura2024.log',
                     filemode='a',
                     format='%(asctime)s - %(levelname)s - %(message)s',
-                    datefmt='%d-%b-%y %H:%M:%S',
-                    level=logging.DEBUG)
+                    datefmt='%d-%b-%y %H:%M:%S')
 
 
 def login(request) -> HttpResponse:
@@ -46,22 +45,22 @@ def login(request) -> HttpResponse:
                     user_type = 'profesor'
                 else:
                     error = 'Credenciales inválidas'
-                    logging.error(funciones.obtener_ip_cliente(request) + ' falló autenticación')
+                    logging.error('%s falló autenticación' % funciones.obtener_ip_cliente(request))
                     return render(request, 'login.html', {'errores': error})
                 #Usuario autenticado
                 request.session['usuario'] = user.id
                 request.session['user_type'] = user_type
                 request.session["notoken"] = True
-                logging.info(funciones.obtener_ip_cliente(request) + ' ha ingresado credenciales correctamente')
+                logging.info('%s ha ingresado credenciales correctamente' % funciones.obtener_ip_cliente(request))
                 return redirect('/doblefactor/')
             else:
                 error = 'Credenciales inválidas'
-                logging.error(funciones.obtener_ip_cliente(request) + ' falló autenticación')
+                logging.error('%s falló autenticación' % funciones.obtener_ip_cliente(request))
                 return render(request, 'login.html', {'errores': error})
 
         except models.Usuario.DoesNotExist:
             error = 'Credenciales inválidas'
-            logging.error(funciones.obtener_ip_cliente(request) + ' falló autenticación')
+            logging.error('%s falló autenticación' % funciones.obtener_ip_cliente(request))
             return render(request, 'login.html', {'errores': error})
 
 
@@ -131,7 +130,7 @@ def registrar_alumno(request):
 
         logging.info(funciones.obtener_ip_cliente(request) + ' ha registrado un alumno')
         messages.success(request, 'Alumno registrado exitosamente.')
-        logging.info('%s ha registrado al usuario %s' % (funciones.obtener_ip_cliente(request), nuevo_usuario.username))
+        logging.info('%s ha registrado un usuario' % funciones.obtener_ip_cliente(request))
         return redirect('/')
 
     return render(request, "registro.html", {'RECAPTCHA_PUBLIC_KEY': settings.RECAPTCHA_PUBLIC_KEY})

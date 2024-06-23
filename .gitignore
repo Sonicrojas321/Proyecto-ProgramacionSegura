@@ -8,6 +8,8 @@ proyectoSegura/proyectoSegura/__pycache__/settings.cpython-39.pyc
 proyectoSegura/proyectoSegura/__pycache__/urls.cpython-39.pyc
 proyectoSegura/proyectoSegura/__pycache__/views.cpython-39.pyc
 secrets.env.cpt
+proyectoSegura/tareas/entrada.txt
+proyectoSegura/tareas/respuesta.py
 data/*
 data/sys/*
 data/mysql*
