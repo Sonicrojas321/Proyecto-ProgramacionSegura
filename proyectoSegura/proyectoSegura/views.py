@@ -299,6 +299,9 @@ def ListaEjercicioMaestro(request):
 def tablaEjercicioM(request):
     return render(request,"tablaEjercicioMaestro.html")
 
+def detalleRespuestaMaestro(request):
+    return render(request,"detalleMaestro.html")
+
 def logout(request) -> HttpResponse:
     """
     Función básica de logout.

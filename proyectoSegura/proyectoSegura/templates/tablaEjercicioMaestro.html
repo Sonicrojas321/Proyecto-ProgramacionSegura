@@ -1,3 +1,4 @@
+
 {% extends "baseMaestro.html" %}
 
 {% block titulo %}Puntajes de Ejercicios{% endblock %}
@@ -7,7 +8,7 @@
 <div class="table-responsive">
     <h5>PUNTAJES POR EJERCICIO:</h5>
 
-    {% for ejercicio, respuestas in puntajes.items %}
+    {% for ejercicio, respuestas in ejercicios_con_respuestas %}
     <h6>{{ ejercicio.nombre_ejercicio }}: {{ ejercicio.descripcion }}</h6>
     <table class="table table-bordered table-striped">
         <caption>Puntajes de {{ ejercicio.nombre_ejercicio }}</caption>

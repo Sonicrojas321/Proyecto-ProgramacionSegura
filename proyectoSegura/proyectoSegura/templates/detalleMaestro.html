@@ -1,0 +1,21 @@
+{% extends "baseMaestro.html" %}
+
+{% block titulo %}Detalle de Respuesta{% endblock %}
+{% block encabezado %}Detalle de Respuesta{% endblock %}
+{% block contenido %}
+
+<div class="card">
+    <div class="card-header">
+        <h5>Nombre del Ejercicio: {{ respuesta.ejercicio.nombre_ejercicio }}</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>Hora de Entrega:</strong> {{ respuesta.hora_entrega }}</p>
+        <p><strong>Puntaje Obtenido:</strong> {{ respuesta.calificacion }}</p>
+        <p><strong>Estudiante:</strong> {{ respuesta.alumno.nombre }} {{ respuesta.alumno.apellido }}</p>
+        <p><strong>Código del Estudiante:</strong></p>
+        <pre>{{ respuesta.respuesta }}</pre>
+    </div>
+</div>
+
+{% endblock %}
+
