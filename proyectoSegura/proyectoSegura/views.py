@@ -40,8 +40,17 @@ def login(request) -> HttpResponse:
         try:
             user = models.Usuario.objects.get(username=username)
             if funciones.password_valido(password, user.password):
+                if models.Alumno.objects.filter(usuario=user).exists():
+                    user_type = 'alumno'
+                elif models.Profesor.objects.filter(usuario=user).exists():
+                    user_type = 'profesor'
+                else:
+                    error = 'Credenciales inválidas'
+                    logging.error(funciones.obtener_ip_cliente(request) + ' falló autenticación')
+                    return render(request, 'login.html', {'errores': error})
                 #Usuario autenticado
                 request.session['usuario'] = user.id
+                request.session['user_type'] = user_type
                 request.session["notoken"] = True
                 logging.info(funciones.obtener_ip_cliente(request) + ' ha ingresado credenciales correctamente')
                 return redirect('/doblefactor/')
@@ -185,7 +194,7 @@ def definir_ejercicio(request) -> HttpResponse:
         )
         ejercicio_nuevo.save()
         logging.info('El profesor ha ingresado creado nueva tarea')
-        return redirect('/lista/')
+        return redirect('/verListaMaestro/')
     return render (request, "subirEjercicioMaestro.html")
 
 #@funciones.logueado
@@ -254,7 +263,12 @@ def doble_factor(request) -> HttpResponse:
             logging.info('%s se ha logeado éxitosamente con el usuario %s' % (funciones.obtener_ip_cliente(request), user.username))
             request.session["logueado"] = True
             request.session["notoken"] = False
-            return redirect('/lista/')
+            user_type = request.session.get('user_type')
+            
+            if user_type == 'alumno':
+                return redirect('/lista/')
+            elif user_type == 'profesor':
+                return redirect('/verListaMaestro/')
         else:
             logging.error('%s ha ingresado incorrectamente el token para el usuario %s' % (funciones.obtener_ip_cliente(request), user.username))
             messages.error(request,'Token incorrecto o tiempo de token expirado')
