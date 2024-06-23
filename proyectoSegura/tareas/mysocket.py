@@ -16,7 +16,7 @@ def recibir_signal(ip, puerto):
 
     while True:
         # Recibir la señal
-        data, address = sock.recvfrom(1024)
+        data, _ = sock.recvfrom(1024)
 
         # Cuando se recibe la señal, ejecutar el script
         if data.decode() == "Ejecutar":

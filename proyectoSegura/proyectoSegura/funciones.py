@@ -245,7 +245,7 @@ def calificar_ejercicio(respuesta: object, ejercicio: object) -> int:
     
     #Mandar señal a contenedor de tareas
 
-    mandarSignal('tareas_segura', 34343, 'Ejecutar')
+    mandar_signal('tareas_segura', 34343, 'Ejecutar')
     
     cliente = docker.from_env() 
     contenedor = cliente.containers.get('proyecto-programacionsegura-tareas_segura-1')
@@ -282,7 +282,7 @@ def obtener_calificacion(resultado:str) -> int:
 
     return resultados.count('True')
 
-def mandarSignal(hostname:str, puerto:int, signal:str):
+def mandar_signal(hostname:str, puerto:int, signal:str):
     """Rutina de creación de socket UDP para la comunicación con otros contenedores.
 
     Args:

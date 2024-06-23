@@ -1,6 +1,6 @@
 projectKey=proyectoSegura
-serverUrl=https://b2d7-189-201-3-104.ngrok-free.app
+serverUrl=https://e716-2806-10a6-f-5cc3-b8db-ba47-2409-d6ef.ngrok-free.app
 serverVersion=10.4.1.88267
-dashboardUrl=https://b2d7-189-201-3-104.ngrok-free.app/dashboard?id=proyectoSegura
-ceTaskId=3368dbd5-470e-4af9-9401-83e8e9a50581
-ceTaskUrl=https://b2d7-189-201-3-104.ngrok-free.app/api/ce/task?id=3368dbd5-470e-4af9-9401-83e8e9a50581
+dashboardUrl=https://e716-2806-10a6-f-5cc3-b8db-ba47-2409-d6ef.ngrok-free.app/dashboard?id=proyectoSegura
+ceTaskId=a50c49d0-d9d8-4461-96b8-3b8f8e3598d6
+ceTaskUrl=https://e716-2806-10a6-f-5cc3-b8db-ba47-2409-d6ef.ngrok-free.app/api/ce/task?id=a50c49d0-d9d8-4461-96b8-3b8f8e3598d6

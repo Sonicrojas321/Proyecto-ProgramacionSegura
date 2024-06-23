@@ -30,8 +30,8 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path("calificando/", views.tarea_revisada),
     #path("verEjericioMaestro/", views.verEjericio_Maestro),
-    path("verListaMaestro/", views.ListaEjercicioMaestro),
-    path("puntajeMaestro/", views.tablaEjercicioM),
-    path("detalleRespuesta/", views.detalleRespuestaMaestro),
+    path("verListaMaestro/", views.lista_ejercicio_maestro),
+    path("puntajeMaestro/", views.tabla_ejerciciom),
+    path("detalleRespuesta/", views.detalle_respuesta_maestro),
     #path('login/', views.login),
 ]

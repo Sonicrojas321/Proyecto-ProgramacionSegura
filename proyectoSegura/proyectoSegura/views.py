@@ -84,7 +84,6 @@ def registrar_alumno(request):
         confirm_contrasena = request.POST.get('contrasenaAlumno1')
         tokenusuario = request.POST.get('token_Usuario')
         botchat = request.POST.get('bot_Usuario')
-        #recaptcha_response = request.POST.get('g-recaptcha-response')  # Obtén el recaptcha response
 
         # Validación del reCAPTCHA
         
@@ -163,8 +162,6 @@ def definir_ejercicio(request) -> HttpResponse:
         HttpResponse: _description_
     """
     if request.method == 'POST':
-        id_user = request.session['usuario']
-        user = user = models.Usuario.objects.get(id=id_user)
 
         nombre_ejercicio = request.POST.get('nombreEjercicio')
         descripcion_ejercicio = request.POST.get('descripcion')
@@ -271,7 +268,6 @@ def doble_factor(request) -> HttpResponse:
             logging.error('%s ha ingresado incorrectamente el token para el usuario %s' % (funciones.obtener_ip_cliente(request), user.username))
             messages.error(request,'Token incorrecto o tiempo de token expirado')
             return redirect('/')
-        #return render(request, "dobleFactor.html")
         
 @funciones.logueado
 def tarea_revisada(request) -> HttpResponse:
@@ -310,12 +306,12 @@ def tarea_revisada(request) -> HttpResponse:
         return redirect('/lista/')
 
 @funciones.logueado
-def ListaEjercicioMaestro(request):
+def lista_ejercicio_maestro(request):
     ejercicios = models.Ejercicio.objects.all()
     return render(request, "listaEjercicioMaestro.html", {'ejercicios':ejercicios})   
 
 @funciones.logueado
-def tablaEjercicioM(request):
+def tabla_ejerciciom(request):
     ejercicios = models.Ejercicio.objects.all()
     ejercicios_con_respuesta = []
     for ejercicio in ejercicios:
@@ -324,7 +320,7 @@ def tablaEjercicioM(request):
     return render(request,"tablaEjercicioMaestro.html", {'ejercicios_con_respuestas': ejercicios_con_respuesta})
 
 @funciones.logueado
-def detalleRespuestaMaestro(request):
+def detalle_respuesta_maestro(request):
     respuesta = models.Respuesta.objects.get(id=27)
     return render(request,"detalleMaestro.html", {'respuesta':respuesta})
 
