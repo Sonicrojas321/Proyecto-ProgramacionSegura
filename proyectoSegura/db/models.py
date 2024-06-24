@@ -48,7 +48,7 @@ class Ejercicio(models.Model):
 
 class Respuesta(models.Model):
     respuesta = models.TextField(blank=True)
-    calificacion = models.IntegerField()
+    calificacion = models.IntegerField(default=0)
     hora_entrega = models.DateTimeField(null=True)
-    ejercicio = models.ForeignKey(Ejercicio, on_delete=models.DO_NOTHING)
+    ejercicio = models.ForeignKey(Ejercicio, on_delete=models.CASCADE)
     alumno = models.ForeignKey(Alumno, on_delete=models.DO_NOTHING)
