@@ -166,8 +166,6 @@ def definir_ejercicio(request) -> HttpResponse:
     """
     if request.session['user_type'] == 'profesor':
         if request.method == 'POST':
-            id_user = request.session['usuario']
-            user = models.Usuario.objects.get(id=id_user)
 
             nombre_ejercicio = request.POST.get('nombreEjercicio')
             descripcion_ejercicio = request.POST.get('descripcion')
