@@ -348,6 +348,16 @@ def detalle_respuesta_maestro(request):
     else:
         return redirect('/verListaMaestro/')
 
+def eliminar_ejercicio(request):
+    if request.session['user_type'] == 'profesor':
+        ejercicio_id = request.POST.get('ejercicio_id')
+        ejercicio_seleccionado = models.Ejercicio.objects.get(id=ejercicio_id)
+
+        ejercicio_seleccionado.delete()
+        return redirect('/verListaMaestro/')
+    else:
+        return redirect('/lista/')
+
 def logout(request) -> HttpResponse:
     """
     Función básica de logout.

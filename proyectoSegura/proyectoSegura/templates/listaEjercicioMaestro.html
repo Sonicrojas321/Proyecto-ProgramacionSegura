@@ -12,8 +12,6 @@
 <div class="table-responsive">
     <h5>EJERCICIOS:</h5>
 
-    <form method="post" action="/verEjercicio/">
-        {% csrf_token %}
         <table class="table table-bordered table-striped">
             <caption>Tabla de ejercicios</caption>
             <thead>
@@ -27,10 +25,6 @@
             <tbody>
                 {% for ejercicio in ejercicios %}
                 <tr>
-                    <td>
-                        <input type="radio" name="ejercicio_id" value="{{ ejercicio.id }}" required>
-                        <input type="hidden" id="user_id" name="user_id" value="{{ usuario }}">
-                    </td>
                     <td>{{ ejercicio.nombre_ejercicio }}</td>
                     <td>{{ ejercicio.descripcion }}</td>
                     <td>
@@ -44,8 +38,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <button type="submit" class="btn btn-primary" id="seleccionar_ejercicio">Ver Ejercicio</button>
-    </form>
 </div>
 
 {% endblock %}

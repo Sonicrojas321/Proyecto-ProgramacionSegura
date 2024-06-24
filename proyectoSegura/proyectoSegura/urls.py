@@ -33,5 +33,6 @@ urlpatterns = [
     path("verListaMaestro/", views.lista_ejercicio_maestro),
     path("puntajeMaestro/", views.tabla_ejerciciom),
     path("detalleRespuesta/", views.detalle_respuesta_maestro),
+    path("eliminarEjercicio/", views.eliminar_ejercicio),
     #path('login/', views.login),
 ]

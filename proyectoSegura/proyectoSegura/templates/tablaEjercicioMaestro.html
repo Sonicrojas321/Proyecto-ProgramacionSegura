@@ -8,7 +8,7 @@
 <div class="table-responsive">
     <h5>PUNTAJES POR EJERCICIO:</h5>
 
-    <form method="post" action="{% url 'detalle_respuesta_maestro' %}">
+    <form method="post" action="/detalleRespuesta/">
         {% csrf_token %}
         {% for ejercicio, respuestas in ejercicios_con_respuestas %}
         <h6>{{ ejercicio.nombre_ejercicio }}: {{ ejercicio.descripcion }}</h6>
