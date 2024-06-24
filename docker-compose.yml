@@ -63,7 +63,11 @@ services:
       image: tareas_segura2024
       restart: always
       volumes:
-         - ./proyectoSegura/tareas:/tareas
+         - ./proyectoSegura/tareas/entrada.txt:/tareas/entrada.txt:ro
+         - ./proyectoSegura/tareas/respuesta.py:/tareas/respuesta.py:ro
+         - ./proyectoSegura/tareas/evaluador.py:/tareas/evaluador.py:ro
+         - ./proyectoSegura/tareas/inyectar.py:/tareas/inyectar.py:ro
+         - ./proyectoSegura/tareas/mysocket.py:/tareas/mysocket.py:ro
       deploy:
          resources:
             limits:

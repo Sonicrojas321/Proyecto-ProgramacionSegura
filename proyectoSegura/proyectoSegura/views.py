@@ -217,7 +217,7 @@ def ver_ejercicio(request) -> HttpResponse:
     Returns:
         HttpResponse: Plantilla de verEjercicio.html
     """
-    if request.session['user_type'] == 'profesor':
+    if request.session['user_type'] == 'alumno':
         if request.method == 'POST':
             id_ejercicio = request.POST.get('ejercicio_id')
             user_id = request.POST.get('user_id')
@@ -230,7 +230,7 @@ def ver_ejercicio(request) -> HttpResponse:
             logging.info('El alumno %s ha ingresado al ejercicio %s' % (alumno.nombre, ejercicio_seleccionado.nombre_ejercicio))
             return render (request, "verEjercicio.html", {'ejercicio':ejercicio_seleccionado, 'usuario':user_id})
     else:
-        return redirect('/verlistaMaestro/')
+        return redirect('/verListaMaestro/')
 
 @funciones.notoken
 def doble_factor(request) -> HttpResponse:
@@ -296,7 +296,7 @@ def tarea_revisada(request) -> HttpResponse:
     Returns:
         HttpResponse: Respuesta HTTP
     """
-    if request.session['user_type'] == 'profesor':
+    if request.session['user_type'] == 'alumno':
         if request.method == 'GET':
             return redirect('/lista/')
         if request.method == 'POST':
