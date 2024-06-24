@@ -334,15 +334,19 @@ def tabla_ejerciciom(request):
             ejercicios_con_respuesta.append((ejercicio, respuestas))
         return render(request,"tablaEjercicioMaestro.html", {'ejercicios_con_respuestas': ejercicios_con_respuesta})
     else:
-        return redirect('/lista/')
+        return redirect('/verListaMaestro/')
 
 @funciones.logueado
 def detalle_respuesta_maestro(request):
-    if request.session['user_type'] == 'profesor':
-        respuesta = models.Respuesta.objects.get(id=27)
-        return render(request,"detalleMaestro.html", {'respuesta':respuesta})
+    if request.method == 'POST' and request.session.get('user_type') == 'profesor':
+        respuesta_id = request.POST.get('respuesta_id')
+        try:
+            respuesta = models.Respuesta.objects.get(id=respuesta_id)
+            return render(request, "detalleMaestro.html", {'respuesta': respuesta})
+        except models.Respuesta.DoesNotExist:
+            return redirect('/verListaMaestro/')
     else:
-        return redirect('/lista/')
+        return redirect('/verListaMaestro/')
 
 def logout(request) -> HttpResponse:
     """
