@@ -23,10 +23,12 @@
                     <th>Seleccionar</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
+                    <th>Fecha de Cierre</th>
+                    <th>Calificación</th>
                 </tr>
             </thead>
             <tbody>
-                {% for ejercicio in ejercicios %}
+                {% for ejercicio, calificacion in ejercicios_con_calificaciones %}
                 <tr>
                     <td>
                         {% if not ejercicio.fecha_cierre|is_past_due %}
@@ -39,6 +41,8 @@
                     </td>
                     <td>{{ ejercicio.nombre_ejercicio }}</td>
                     <td>{{ ejercicio.descripcion }}</td>
+                    <td>{{ ejercicio.fecha_cierre|date:"F j, Y, g:i a" }}</td>
+                    <td>{{ calificacion }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

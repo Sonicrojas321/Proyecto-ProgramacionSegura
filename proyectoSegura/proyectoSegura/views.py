@@ -149,8 +149,16 @@ def lista_ejercicios(request) -> HttpResponse:
             ejercicios = models.Ejercicio.objects.all()
             id_user = request.session['usuario']
             user = models.Usuario.objects.get(id=id_user)
+            alumno = models.Alumno.objects.get(usuario=user)
+            
+            ejercicios_con_calificaciones = []
+            for ejercicio in ejercicios:
+                calificacion = models.Respuesta.objects.filter(ejercicio=ejercicio, alumno=alumno).first()
+                calificacion_value = calificacion.calificacion if calificacion else "N/A"
+                ejercicios_con_calificaciones.append((ejercicio, calificacion_value))
+
             logging.info('%s ha ingresado a la lista de ejercicios' % user.username)
-            return render(request, "listaejercicios.html", {'ejercicios': ejercicios})
+            return render(request, "listaejercicios.html", {'ejercicios_con_calificaciones': ejercicios_con_calificaciones, 'usuario': user})
     else:
         return redirect('/verListaMaestro/')
 
