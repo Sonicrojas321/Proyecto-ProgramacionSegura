@@ -152,7 +152,7 @@ def lista_ejercicios(request) -> HttpResponse:
             logging.info('%s ha ingresado a la lista de ejercicios' % user.username)
             return render(request, "listaejercicios.html", {'ejercicios': ejercicios})
     else:
-        return redirect('/verlistaMaestro/')
+        return redirect('/verListaMaestro/')
 
 @funciones.logueado
 def definir_ejercicio(request) -> HttpResponse:
@@ -164,7 +164,7 @@ def definir_ejercicio(request) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    if request.session['user_type'] == 'maestro':
+    if request.session['user_type'] == 'profesor':
         if request.method == 'POST':
             id_user = request.session['usuario']
             user = models.Usuario.objects.get(id=id_user)
@@ -211,7 +211,7 @@ def ver_ejercicio(request) -> HttpResponse:
     Returns:
         HttpResponse: Plantilla de verEjercicio.html
     """
-    if request.session['user_type'] == 'alumno':
+    if request.session['user_type'] == 'profesor':
         if request.method == 'POST':
             id_ejercicio = request.POST.get('ejercicio_id')
             user_id = request.POST.get('user_id')
@@ -290,7 +290,7 @@ def tarea_revisada(request) -> HttpResponse:
     Returns:
         HttpResponse: Respuesta HTTP
     """
-    if request.session['user_type'] == 'alumno':
+    if request.session['user_type'] == 'profesor':
         if request.method == 'GET':
             return redirect('/lista/')
         if request.method == 'POST':
@@ -319,16 +319,16 @@ def tarea_revisada(request) -> HttpResponse:
         return redirect('/verListaMaestro/')
 
 @funciones.logueado
-def ListaEjercicioMaestro(request):
-    if request.session['user_type'] == 'maestro':
+def lista_ejercicio_maestro(request):
+    if request.session['user_type'] == 'profesor':
         ejercicios = models.Ejercicio.objects.all()
         return render(request, "listaEjercicioMaestro.html", {'ejercicios':ejercicios})
     else:
         return redirect('/lista/')
 
 @funciones.logueado
-def tablaEjercicioM(request):
-    if request.session['user_type'] == 'maestro':
+def tabla_ejerciciom(request):
+    if request.session['user_type'] == 'profesor':
         ejercicios = models.Ejercicio.objects.all()
         ejercicios_con_respuesta = []
         for ejercicio in ejercicios:
@@ -339,8 +339,8 @@ def tablaEjercicioM(request):
         return redirect('/lista/')
 
 @funciones.logueado
-def detalleRespuestaMaestro(request):
-    if request.session['user_type'] == 'maestro':
+def detalle_respuesta_maestro(request):
+    if request.session['user_type'] == 'profesor':
         respuesta = models.Respuesta.objects.get(id=27)
         return render(request,"detalleMaestro.html", {'respuesta':respuesta})
     else:
